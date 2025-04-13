@@ -19,67 +19,70 @@ fun DataClassData.generate(): String {
         ?: ""
 
     val concatMethods = if (parameter.size >= 2) {
-        val operator = "ǀ"
-        buildString {
-            append("@JvmName(\"context1\")\n")
-
-            if (parameter.size == 2)
-                append(
-                    """
-                    |            infix fun T0.$operator(next: T1) {
-                    |                _values += $dataClassName(this, next)
-                    |            } 
-                    """.trimMargin()
-                )
-            else {
-                append(
-                    """
-                    |            infix fun T0.$operator(next: T1) =
-                    |                this to next
-                    """.trimMargin()
-                )
-                (2 until parameter.size).mapIndexed { index, i ->
-                    val receiverType = buildString {
-                        append((2..i).joinToString(separator = "<") { "Pair" })
-                        append("<T0, T1>")
-                        append((2 until i).joinToString(separator = "") { ", T$it>" })
-                    }
-                    append("\n\n")
-
-
-                    append(
-                        if (i == parameter.size - 1) {
-                            val firstParameters = mutableListOf(
-                                (1 until i).joinToString(separator = ".") { "first" }
-                            )
-                            if (parameter.size > 3) {
-                                (0..i - 3).reversed().forEach {
-                                    firstParameters.add(
-                                        (0..it).joinToString(
-                                            separator = ".",
-                                            postfix = ".second"
-                                        ) { "first" }
-                                    )
-                                }
-                            }
-
-                            val firstParameterString = firstParameters.joinToString(", ")
+        listOf(singleDataSeperator, doubleDataSeperator)
+            .joinToString(prefix = "\n", separator = "\n\n") { operator ->
+                buildString {
+                    if (parameter.size == 2)
+                        append(
                             """
-                            |            @JvmName("context$i")
-                            |            infix fun $receiverType.$operator(next: T$i) {
-                            |               _values += $dataClassName($firstParameterString, second, next)   
+                            |            @JvmName("context1_${operator.length}")
+                            |            infix fun T0.$operator(next: T1) {
+                            |                _values += $dataClassName(this, next)
                             |            }
                             """.trimMargin()
-                        } else
+                        )
+                    else {
+                        append(
                             """
-                            |            @JvmName("context$i")
-                            |            infix fun $receiverType.$operator(next: T$i) =
-                            |               this to next
+                            |            @JvmName("context1_${operator.length}")
+                            |            infix fun T0.$operator(next: T1) =
+                            |                this to next
                             """.trimMargin()
-                    )
+                        )
+                        (2 until parameter.size).map { i ->
+                            val receiverType = buildString {
+                                append((2..i).joinToString(separator = "<") { "Pair" })
+                                append("<T0, T1>")
+                                append((2 until i).joinToString(separator = "") { ", T$it>" })
+                            }
+                            append("\n\n")
+
+
+                            append(
+                                if (i == parameter.size - 1) {
+                                    val firstParameters = mutableListOf(
+                                        (1 until i).joinToString(separator = ".") { "first" }
+                                    )
+                                    if (parameter.size > 3) {
+                                        (0..i - 3).reversed().forEach {
+                                            firstParameters.add(
+                                                (0..it).joinToString(
+                                                    separator = ".",
+                                                    postfix = ".second"
+                                                ) { "first" }
+                                            )
+                                        }
+                                    }
+
+                                    val firstParameterString = firstParameters.joinToString(", ")
+                                    """
+                                    |            @JvmName("context${i}_${operator.length}")
+                                    |            infix fun $receiverType.$operator(next: T$i) {
+                                    |               _values += $dataClassName($firstParameterString, second, next)   
+                                    |            }
+                                    """.trimMargin()
+                                } else
+                                    """
+                                    |            @JvmName("context${i}_${operator.length}")
+                                    |            infix fun $receiverType.$operator(next: T$i) =
+                                    |               this to next
+                                    """.trimMargin()
+                            )
+                        }
+                    }
                 }
+
             }
-        }
     } else ""
 
     val result = """
@@ -98,7 +101,6 @@ fun DataClassData.generate(): String {
             private val _values = mutableListOf<$dataClassName$genericTypes>()
             val values: List<$dataClassName$genericTypes>
                 get() = _values.toList()
-                
             $concatMethods
         }
         """.trimIndent()
