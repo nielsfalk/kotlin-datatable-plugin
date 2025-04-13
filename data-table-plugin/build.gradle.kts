@@ -34,6 +34,7 @@ dependencies {
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")
+    testImplementation(kotlin("test-junit5"))
 }
 
 tasks.withType<Test>().configureEach {

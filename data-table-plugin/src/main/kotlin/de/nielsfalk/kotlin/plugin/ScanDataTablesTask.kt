@@ -44,42 +44,8 @@ abstract class ScanDataTablesTask : DefaultTask() {
 
         dataClasses.forEach { dataClassData ->
             dataClassData.run {
-                val constructorProperties =
-                    parameter.joinToString(",") { it.run { "val $name: T$index" } }
-                val outGenericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
-                    ?.joinToString(
-                        prefix = "<",
-                        separator = ",",
-                        postfix = ">"
-                    ) { it.run { "out T$index" } }
-                    ?: ""
-                val genericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
-                    ?.joinToString(
-                        prefix = "<",
-                        separator = ",",
-                        postfix = ">"
-                    ) { it.run { "T$index" } }
-                    ?: ""
-
                 genDir.resolve(generatedFileName).writeText(
-                    """
-                    package $packageString
-                     
-                    data class $dataClassName$outGenericTypes($constructorProperties){
-                        companion object {
-                            fun $genericTypes data(function: ${dataClassName}Context$genericTypes.() -> Unit): List<$dataClassName$genericTypes> =
-                                ${dataClassName}Context$genericTypes()
-                                    .apply(function)
-                                    .values
-                        }
-                    }
-                    
-                    class ${dataClassName}Context$genericTypes {
-                        private val _values = mutableListOf<$dataClassName$genericTypes>()
-                        val values: List<$dataClassName$genericTypes>
-                            get() = _values.toList()
-                    }
-                    """.trimIndent()
+                    generate()
                 )
             }
         }
