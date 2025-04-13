@@ -22,23 +22,62 @@ fun DataClassData.generate(): String {
         val operator = "ǀ"
         buildString {
             append("@JvmName(\"context1\")\n")
-            append(
-                if (parameter.size == 2)
+
+            if (parameter.size == 2)
+                append(
                     """
                     |            infix fun T0.$operator(next: T1) {
                     |                _values += $dataClassName(this, next)
                     |            } 
                     """.trimMargin()
-                else
+                )
+            else {
+                append(
                     """
                     |            infix fun T0.$operator(next: T1) =
                     |                this to next
                     """.trimMargin()
-            )
+                )
+                (2 until parameter.size).mapIndexed { index, i ->
+                    val receiverType = buildString {
+                        append((2..i).joinToString(separator = "<") { "Pair" })
+                        append("<T0, T1>")
+                        append((2 until i).joinToString(separator = "") { ", T$it>" })
+                    }
+                    append("\n\n")
 
-            (2..parameter.size).joinToString(separator = "") { i ->
-                append("")
 
+                    append(
+                        if (i == parameter.size - 1) {
+                            val firstParameters = mutableListOf(
+                                (1 until i).joinToString(separator = ".") { "first" }
+                            )
+                            if (parameter.size > 3) {
+                                (0..i - 3).reversed().forEach {
+                                    firstParameters.add(
+                                        (0..it).joinToString(
+                                            separator = ".",
+                                            postfix = ".second"
+                                        ) { "first" }
+                                    )
+                                }
+                            }
+
+                            val firstParameterString = firstParameters.joinToString(", ")
+                            """
+                            |            @JvmName("context$i")
+                            |            infix fun $receiverType.$operator(next: T$i) {
+                            |               _values += $dataClassName($firstParameterString, second, next)   
+                            |            }
+                            """.trimMargin()
+                        } else
+                            """
+                            |            @JvmName("context$i")
+                            |            infix fun $receiverType.$operator(next: T$i) =
+                            |               this to next
+                            """.trimMargin()
+                    )
+                }
             }
         }
     } else ""

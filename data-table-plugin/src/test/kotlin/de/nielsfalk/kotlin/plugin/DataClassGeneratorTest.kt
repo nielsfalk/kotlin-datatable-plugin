@@ -23,6 +23,7 @@ class DataClassGeneratorTest : FreeSpec({
 
         val generated = data.generate()
 
+        //language=kotlin
         assertEquals(
             """
                 package de.nielsfalk.dataTables.plugin
@@ -44,6 +45,19 @@ class DataClassGeneratorTest : FreeSpec({
                     @JvmName("context1")
                     infix fun T0.ǀ(next: T1) =
                         this to next
+
+                    @JvmName("context2")
+                    infix fun Pair<T0, T1>.ǀ(next: T2) =
+                       this to next
+
+                    @JvmName("context3")
+                    infix fun Pair<Pair<T0, T1>, T2>.ǀ(next: T3) =
+                       this to next
+
+                    @JvmName("context4")
+                    infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀ(next: T4) {
+                       _values += Spock(first.first.first, first.first.second, first.second, second, next)   
+                    }
                 }
             """.trimIndent(),
             generated
@@ -66,6 +80,7 @@ class DataClassGeneratorTest : FreeSpec({
 
         val generated = data.generate()
 
+        //language=kotlin
         assertEquals(
             """
                 package de.nielsfalk.dataTables.plugin
