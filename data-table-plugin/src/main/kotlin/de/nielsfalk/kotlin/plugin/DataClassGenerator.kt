@@ -18,6 +18,31 @@ fun DataClassData.generate(): String {
         ) { it.run { "T$index" } }
         ?: ""
 
+    val concatMethods = if (parameter.size >= 2) {
+        val operator = "ǀ"
+        buildString {
+            append("@JvmName(\"context1\")\n")
+            append(
+                if (parameter.size == 2)
+                    """
+                    |            infix fun T0.$operator(next: T1) {
+                    |                _values += $dataClassName(this, next)
+                    |            } 
+                    """.trimMargin()
+                else
+                    """
+                    |            infix fun T0.$operator(next: T1) =
+                    |                this to next
+                    """.trimMargin()
+            )
+
+            (2..parameter.size).joinToString(separator = "") { i ->
+                append("")
+
+            }
+        }
+    } else ""
+
     val result = """
         package $packageString
 
@@ -34,6 +59,8 @@ fun DataClassData.generate(): String {
             private val _values = mutableListOf<$dataClassName$genericTypes>()
             val values: List<$dataClassName$genericTypes>
                 get() = _values.toList()
+                
+            $concatMethods
         }
         """.trimIndent()
     return result

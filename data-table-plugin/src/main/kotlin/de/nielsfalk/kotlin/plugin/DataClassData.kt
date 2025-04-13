@@ -110,7 +110,7 @@ private fun Iterator<String>.nextParameterCount(): Int? {
             }
         }
     }
-    TODO("not implemented")
+    return null
 }
 
 

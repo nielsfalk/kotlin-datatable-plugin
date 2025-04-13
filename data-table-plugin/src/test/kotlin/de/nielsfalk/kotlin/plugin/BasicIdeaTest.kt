@@ -46,15 +46,19 @@ class BasicIdeaDataContext<T0, T1, T2, T3, T4> {
     val values: List<BasicIdeaData<T0, T1, T2, T3, T4>>
         get() = _values.toList()
 
-    infix fun T0.ǀ(second: T1): Pair<T0, T1> {
-        return this to second
-    }
-
     @JvmName("context1")
-    infix fun Pair<T0, T1>.ǀ(next: T2) = this to next
+    infix fun T0.ǀ(next: T1): Pair<T0, T1> =
+        this to next
+
     @JvmName("context2")
-    infix fun Pair<Pair<T0, T1>, T2>.ǀ(next: T3) = this to next
+    infix fun Pair<T0, T1>.ǀ(next: T2) =
+        this to next
+
     @JvmName("context3")
+    infix fun Pair<Pair<T0, T1>, T2>.ǀ(next: T3) =
+        this to next
+
+    @JvmName("context4")
     infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀ(last: T4) {
         _values += BasicIdeaData(first.first.first, first.first.second, first.second, second, last)
     }
