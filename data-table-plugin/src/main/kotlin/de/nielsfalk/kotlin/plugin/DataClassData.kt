@@ -5,7 +5,6 @@ import java.nio.file.Path
 data class DataClassData(
     val dataClassName: String,
     val parameterNames: List<String>?,
-    val types: List<String>?,
     val lineParameterCount: Int?,
     val path: String,
     val packageString: String?,
@@ -31,21 +30,14 @@ data class DataClassData(
                                 .map { it.groupValues[1] }
                                 .toList()
                         } else null
-                        val (dataClassName, types) = if (lineIterator.hasNext()) {
+                        val dataClassName = if (lineIterator.hasNext()) {
                             val typeParts =
-                                lineIterator.next().split("<", limit = 2).iterator()
+                                lineIterator.next().split(delimiters = arrayOf("<", "{"), limit = 2)
+                                    .iterator()
                             val dataClassName =
                                 if (typeParts.hasNext()) typeParts.next().trim() else null
-                            val types =
-                                if (typeParts.hasNext())
-                                    typeParts.next()
-                                        .trim().removeSuffix("{")
-                                        .trim().removeSuffix(">")
-                                        .split(",")
-                                        .map(String::trim)
-                                else null
-                            dataClassName to types
-                        } else null to null
+                            dataClassName
+                        } else null
                         val lineParameterCount = lineIterator.nextParameterCount()
                             .takeIf {
                                 while (lineIterator.hasNext()) {
@@ -61,7 +53,6 @@ data class DataClassData(
                             DataClassData(
                                 dataClassName = it,
                                 parameterNames = parameterNames,
-                                types = types,
                                 lineParameterCount = lineParameterCount,
                                 path = path.toString(),
                                 packageString = packageString,
@@ -78,24 +69,21 @@ data class DataClassData(
     }
 
     val parameter: List<Parameter> by lazy {
-        val parameterCount = types?.count()
-            ?:parameterNames?.count()
-            ?:lineParameterCount
-            ?:0
+        val parameterCount = parameterNames?.count()
+            ?: lineParameterCount
+            ?: 0
         (0 until parameterCount).map {
             Parameter(
                 name = parameterNames?.getOrNull(it) ?: "v$it",
                 index = it,
-                type = types?.getOrNull(it) ?: "String"
             )
         }
     }
 }
 
 data class Parameter(
-    val name:String,
-    val index:Int,
-    val type:String
+    val name: String,
+    val index: Int,
 )
 
 
@@ -119,11 +107,10 @@ fun List<DataClassData>.groupByClass(): List<DataClassData> =
         .values
         .map { list ->
             list.maxBy {
-            if (it.parameterNames == null) 0 else 2 +
-                    if (it.types == null) 0 else 4 +
-                            if (it.lineParameterCount == null) 0 else 1
+                if (it.parameterNames == null) 0 else 2 +
+                        if (it.lineParameterCount == null) 0 else 1
+            }
         }
-    }
 
 const val singleDataSeperator = "ǀ"
 const val doubleDataSeperator = "ǀǀ"

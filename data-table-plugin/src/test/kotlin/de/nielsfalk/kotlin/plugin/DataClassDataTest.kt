@@ -39,7 +39,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            types = listOf("String", "Int", "Boolean"),
             lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "de.nielsfalk.dataTables.plugin",
