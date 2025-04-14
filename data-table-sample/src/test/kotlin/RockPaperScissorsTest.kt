@@ -23,7 +23,6 @@ class RockPaperScissorsTest : FreeSpec({
 
         result shouldBe expectedWinner
     }
-
 })
 
 enum class Hand {
