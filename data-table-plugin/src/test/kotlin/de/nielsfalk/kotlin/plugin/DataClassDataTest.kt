@@ -28,7 +28,7 @@ class DataClassDataTest : FreeSpec({
 
             fun main() {
                 @DataTable("name"  ,"length", "truthy")
-                Spock.data<String  , Int    , Boolean > {
+                Spock     <String  , Int    , Boolean > {
                            "sdfsd" ǀ 15     ǀ true
                            "dfsff" ǀ 12     ǀ true
                 }

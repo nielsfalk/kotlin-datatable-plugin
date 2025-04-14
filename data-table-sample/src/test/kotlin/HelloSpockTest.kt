@@ -11,7 +11,7 @@ class HelloSpockTest : FreeSpec({
     "length of Spock's and his friends' names" - {
         test(
             @DataTable("name"   , "expectedLength")
-            Spock.data<String   , Int             > {
+            Spock     <String   , Int             > {
                        "Spock"  ǀ 5
                        "Kirk"   ǀ 4
                        "Scotty" ǀ 6

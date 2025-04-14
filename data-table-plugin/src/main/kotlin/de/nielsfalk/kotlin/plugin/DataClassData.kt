@@ -33,7 +33,7 @@ data class DataClassData(
                         } else null
                         val (dataClassName, types) = if (lineIterator.hasNext()) {
                             val typeParts =
-                                lineIterator.next().split(".data<", limit = 2).iterator()
+                                lineIterator.next().split("<", limit = 2).iterator()
                             val dataClassName =
                                 if (typeParts.hasNext()) typeParts.next().trim() else null
                             val types =

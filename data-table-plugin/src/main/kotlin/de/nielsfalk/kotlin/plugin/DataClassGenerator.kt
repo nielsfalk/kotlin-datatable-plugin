@@ -88,14 +88,12 @@ fun DataClassData.generate(): String {
     val result = """
         ${packageString?.let { "package $it" } ?: ""}
 
-        data class $dataClassName$outGenericTypes($constructorProperties){
-            companion object {
-                fun $genericTypes data(function: ${dataClassName}Context$genericTypes.() -> Unit): List<$dataClassName$genericTypes> =
-                    ${dataClassName}Context$genericTypes()
-                        .apply(function)
-                        .values
-            }
-        }
+        data class $dataClassName$outGenericTypes($constructorProperties)
+        
+        fun $genericTypes ${dataClassName}(function: ${dataClassName}Context$genericTypes.() -> Unit): List<$dataClassName$genericTypes> =
+            ${dataClassName}Context$genericTypes()
+                .apply(function)
+                .values
         
         class ${dataClassName}Context$genericTypes {
             private val _values = mutableListOf<$dataClassName$genericTypes>()
