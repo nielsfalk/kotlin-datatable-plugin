@@ -16,23 +16,24 @@ abstract class ScanDataTablesTask : DefaultTask() {
 
     @TaskAction
     fun scanAndGenerate() {
-        config.get().forEach {
-            val genDir = File(it.outputDirAbsolut)
-            genDir.mkdirs()
+        config.get().forEach { configEntry ->
+            val outputDirectory = File(configEntry.outputDirectoryAbsolut)
+            outputDirectory.mkdirs()
 
 
-            val dataClasses = it.srcDirs.flatMap { dir ->
-                val toPath = File(dir).toPath()
-                Files.walk(toPath)
-                    .filter { it.isRegularFile() && it.toString().endsWith(".kt") }
-                    .toList()
-                    .flatMap { path ->
-                        DataClassData.of(path, path.readText())
-                    }
-            }.groupByClass()
+            val dataClasses = configEntry.srcDirs
+                .mapNotNull { File(it).takeIf(File::exists)?.let(File::toPath) }
+                .flatMap { path ->
+                    Files.walk(path)
+                        .filter { it.isRegularFile() && it.toString().endsWith(".kt") }
+                        .toList()
+                        .flatMap {
+                            DataClassData.of(it, it.readText())
+                        }
+                }.groupByClass()
             val filenames = dataClasses.map { it.generatedFileName }
 
-            genDir.listFiles(FileFilter { it.name.startsWith("___") && it.name.endsWith(".kt") })!!
+            outputDirectory.listFiles(FileFilter { it.name.startsWith("___") && it.name.endsWith(".kt") })!!
                 .filter { it.name !in filenames }
                 .forEach {
                     it.delete()
@@ -40,14 +41,14 @@ abstract class ScanDataTablesTask : DefaultTask() {
 
             dataClasses.forEach { dataClassData ->
                 dataClassData.run {
-                    genDir.resolve(generatedFileName).writeText(
+                    outputDirectory.resolve(generatedFileName).writeText(
                         generate()
                     )
                 }
             }
 
 
-            genDir.resolve("DataTablesAnnotation.kt").writeText(
+            outputDirectory.resolve("DataTablesAnnotation.kt").writeText(
                 """
                 package de.nielsfalk.dataTables
 
@@ -57,14 +58,14 @@ abstract class ScanDataTablesTask : DefaultTask() {
             """.trimIndent()
             )
 
-            println("✅ Generated: ${genDir.absolutePath}")
+            println("✅ Generated: ${outputDirectory.absolutePath}")
         }
     }
 }
 
 data class ScanDataTablesTaskConfigItem(
     val name: String,
-    val outputDir: String,
-    val outputDirAbsolut: String,
+    val outputDirectory: String,
+    val outputDirectoryAbsolut: String,
     val srcDirs: List<String>
 )

@@ -33,21 +33,23 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
                                     name = sourceSet.name,
                                     srcDirs = sourceSet.allSource.srcDirs.map { it.absolutePath }
                                         .filter { it.endsWith("/kotlin") },
-                                    outputDir = outputDir,
-                                    outputDirAbsolut = project.layout.buildDirectory.dir(outputDir)
+                                    outputDirectory = outputDir,
+                                    outputDirectoryAbsolut = project.layout.buildDirectory.dir(outputDir)
                                         .get().asFile.also {
                                             it.mkdirs()
                                         }
                                         .absolutePath,
                                 )
-                            })
+                            }
+                            .filter { it.srcDirs.isNotEmpty() }
+                    )
                 }
             }
 
         project.afterEvaluate {
             project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
                 taskProvider.get().config.get().forEach {
-                    sourceSets.getByName(it.name).java.srcDirs(project.layout.buildDirectory.dir(it.outputDir))
+                    sourceSets.getByName(it.name).java.srcDirs(project.layout.buildDirectory.dir(it.outputDirectory))
                 }
             }
         }
@@ -62,7 +64,6 @@ abstract class DataTableScannerExtension {
     init {
         testSourcesOnly.convention(false)
         addGeneratedSourcesToSourceSet.convention(true)
-        sourceSets.convention(listOf())
         sourceSets.convention(listOf())
     }
 }
