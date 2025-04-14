@@ -9,10 +9,6 @@ repositories {
     google()
 }
 
-dataTableScanner {
-    sourceDirs.set(listOf(layout.projectDirectory.dir("src/main/kotlin")))
-}
-
 tasks.named("compileKotlin") {
     dependsOn("scanDataTables")
 }

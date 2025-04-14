@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.ListProperty
+import org.gradle.api.provider.Property
 
 
 abstract class DataTableScannerPlugin : Plugin<Project> {
@@ -14,27 +15,54 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
 
         val taskProvider =
             project.tasks.register("scanDataTables", ScanDataTablesTask::class.java) {
-                sourceDirs.set(extension.sourceDirs)
-                outputDir.set(project.layout.buildDirectory.dir("generated/dataTable"))
+                project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
+                    val testSourcesOnly = extension.testSourcesOnly.get()
+                    val sourceSetNames = extension.sourceSets.get()
+                        .takeIf { it.isNotEmpty() }
+                        ?: listOfNotNull(
+                            if (testSourcesOnly) null else "main",
+                            if (testSourcesOnly) null else "commonMain",
+                            "test",
+                            "commonTest"
+                        )
+                    config.set(
+                        sourceSets.filter { it.name in sourceSetNames }
+                            .map { sourceSet ->
+                                val outputDir = "generated/dataTable-${sourceSet.name}"
+                                ScanDataTablesTaskConfigItem(
+                                    name = sourceSet.name,
+                                    srcDirs = sourceSet.allSource.srcDirs.map { it.absolutePath }
+                                        .filter { it.endsWith("/kotlin") },
+                                    outputDir = outputDir,
+                                    outputDirAbsolut = project.layout.buildDirectory.dir(outputDir)
+                                        .get().asFile.also {
+                                            it.mkdirs()
+                                        }
+                                        .absolutePath,
+                                )
+                            })
+                }
             }
 
         project.afterEvaluate {
             project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
-                //commonMain main
-                //commonTest test
-
-
-                sourceSets.getByName("main").java.srcDir(taskProvider.get().outputDir)
+                taskProvider.get().config.get().forEach {
+                    sourceSets.getByName(it.name).java.srcDirs(project.layout.buildDirectory.dir(it.outputDir))
+                }
             }
         }
     }
 }
 
 abstract class DataTableScannerExtension {
-   //todo aProperty testSourcesOnly default false
+    abstract val testSourcesOnly: Property<Boolean>
+    abstract val addGeneratedSourcesToSourceSet: Property<Boolean>
+    abstract val sourceSets: ListProperty<String>
 
-    //todo a property add to source set default true
-
-    //todo replace sourceDirs with searching for kotlin in sourcesets commonMain main or if testSourcesOnly in commonTest test
-    abstract val sourceDirs: ListProperty<org.gradle.api.file.Directory>
+    init {
+        testSourcesOnly.convention(false)
+        addGeneratedSourcesToSourceSet.convention(true)
+        sourceSets.convention(listOf())
+        sourceSets.convention(listOf())
+    }
 }
