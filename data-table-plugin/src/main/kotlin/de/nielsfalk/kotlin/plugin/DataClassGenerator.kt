@@ -86,7 +86,7 @@ fun DataClassData.generate(): String {
     } else ""
 
     val result = """
-        package $packageString
+        ${packageString?.let { "package $it" } ?: ""}
 
         data class $dataClassName$outGenericTypes($constructorProperties){
             companion object {
