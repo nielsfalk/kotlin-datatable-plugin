@@ -10,9 +10,9 @@ class HelloSpockTest : FreeSpec({
     "length of Spock's and his friends' names" - {
         @Data("name"   , "expectedLength")
         Spock {
-                   "Spock"  ǀ 5
-                   "Kirk"   ǀ 4
-                   "Scotty" ǀ 6
+              "Spock"  ǀ 5
+              "Kirk"   ǀ 4
+              "Scotty" ǀ 6
         }.each {
             "${name}s name has length $expectedLength" {
                 name.length shouldBe expectedLength

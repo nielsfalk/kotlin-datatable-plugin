@@ -1,11 +1,12 @@
 import Hand.*
 import de.nielsfalk.dataTables.Data
-import de.nielsfalk.datatable.testutil.test
+import de.nielsfalk.datatable.testutil.applyNames
 import io.kotest.core.spec.style.FreeSpec
+import io.kotest.datatest.withData
 import io.kotest.matchers.shouldBe
 
-class RockPaperScissorsTest : FreeSpec({
-    test(
+class KotestDatatestTest : FreeSpec({
+    withData(
         @Data("first"  , "second" ,  "expectedWinner")
         TestCase {
               Rock     ǀ Rock     ǀǀ null
@@ -17,13 +18,14 @@ class RockPaperScissorsTest : FreeSpec({
               Rock     ǀ Paper    ǀǀ Paper
               Paper    ǀ Scissors ǀǀ Scissors
               Scissors ǀ Rock     ǀǀ Rock
-        }
+        }.applyNames ()
     ) {
-        val result = first defend second
+        val result = it.first defend it.second
 
-        result shouldBe expectedWinner
+        result shouldBe it.expectedWinner
     }
 })
+
 
 enum class Hand {
     Rock, Paper, Scissors
