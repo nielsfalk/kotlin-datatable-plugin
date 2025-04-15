@@ -1,22 +1,22 @@
 import Hand.*
-import de.nielsfalk.dataTables.DataTable
+import de.nielsfalk.dataTables.Data
 import de.nielsfalk.datatable.testutil.test
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
 class RockPaperScissorsTest : FreeSpec({
     test(
-        @DataTable("first"  , "second" ,  "expectedWinner")
+        @Data("first"  , "second" ,  "expectedWinner")
         TestCase {
-                   Rock     ǀ Rock     ǀǀ null
-                   Paper    ǀ Paper    ǀǀ null
-                   Scissors ǀ Scissors ǀǀ null
-                   Rock     ǀ Scissors ǀǀ Rock
-                   Paper    ǀ Rock     ǀǀ Paper
-                   Scissors ǀ Paper    ǀǀ Scissors
-                   Rock     ǀ Paper    ǀǀ Paper
-                   Paper    ǀ Scissors ǀǀ Scissors
-                   Scissors ǀ Rock     ǀǀ Rock
+              Rock     ǀ Rock     ǀǀ null
+              Paper    ǀ Paper    ǀǀ null
+              Scissors ǀ Scissors ǀǀ null
+              Rock     ǀ Scissors ǀǀ Rock
+              Paper    ǀ Rock     ǀǀ Paper
+              Scissors ǀ Paper    ǀǀ Scissors
+              Rock     ǀ Paper    ǀǀ Paper
+              Paper    ǀ Scissors ǀǀ Scissors
+              Scissors ǀ Rock     ǀǀ Rock
         }
     ) {
         val result = first defend second

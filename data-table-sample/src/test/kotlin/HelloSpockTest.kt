@@ -1,4 +1,4 @@
-import de.nielsfalk.dataTables.DataTable
+import de.nielsfalk.dataTables.Data
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 
@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldBe
  */
 class HelloSpockTest : FreeSpec({
     "length of Spock's and his friends' names" - {
-        @DataTable("name"   , "expectedLength")
+        @Data("name"   , "expectedLength")
         Spock {
                    "Spock"  ǀ 5
                    "Kirk"   ǀ 4

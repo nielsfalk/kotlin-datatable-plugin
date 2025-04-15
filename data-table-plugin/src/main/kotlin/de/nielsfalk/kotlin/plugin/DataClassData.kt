@@ -17,10 +17,10 @@ data class DataClassData(
 ) {
     companion object {
         fun of(path: Path, text: String): List<DataClassData> =
-            if (text.contains("@DataTable") && text.contains("import de.nielsfalk.dataTables.DataTable")) {
+            if (text.contains("@Data") && text.contains("import de.nielsfalk.dataTables.Data")) {
                 val packageString = text.lineSequence().firstOrNull { it.startsWith("package") }
                     ?.removePrefix("package")?.trim()
-                text.split("@DataTable")
+                text.split("@Data")
                     .drop(1)
                     .mapNotNull { contantAfterAnnotation ->
                         val lineIterator = contantAfterAnnotation.lineSequence().iterator()

@@ -15,7 +15,7 @@ gradlePlugin {
             id = "de.nielsfalk.kotlin.data-table-scanner"
             implementationClass = "de.nielsfalk.kotlin.plugin.DataTableScannerPlugin"
             displayName = "Data Table Scanner Plugin"
-            description = "Scans Kotlin files for @DataTable and generates a map"
+            description = "Scans Kotlin files for @Data and generates a List of data classes"
         }
     }
 }

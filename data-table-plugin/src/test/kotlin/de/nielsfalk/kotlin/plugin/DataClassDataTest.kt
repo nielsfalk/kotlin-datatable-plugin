@@ -9,7 +9,7 @@ import java.nio.file.Paths
 class DataClassDataTest : FreeSpec({
     val path = Paths.get("src/aPath.kt")
 
-    "should return null when the content does not contain @DataTable" {
+    "should return null when the content does not contain @Data" {
         val text = """
                 package test
                 
@@ -27,10 +27,10 @@ class DataClassDataTest : FreeSpec({
 
 
             fun main() {
-                @DataTable("name"  ,"length", "truthy")
-                Spock     <String  , Int    , Boolean > {
-                           "sdfsd" ǀ 15     ǀ true
-                           "dfsff" ǀ 12     ǀ true
+                @Data("name"  ,"length", "truthy")
+                Spock<String  , Int    , Boolean > {
+                      "sdfsd" ǀ 15     ǀ true
+                      "dfsff" ǀ 12     ǀ true
                 }
             }
         """.trimIndent()

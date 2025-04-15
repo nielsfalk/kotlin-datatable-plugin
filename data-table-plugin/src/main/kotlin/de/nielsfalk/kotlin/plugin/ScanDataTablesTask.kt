@@ -51,13 +51,13 @@ abstract class ScanDataTablesTask : DefaultTask() {
             }
 
 
-            outputDirectory.resolve("DataTablesAnnotation.kt").writeText(
+            outputDirectory.resolve("DataAnnotation.kt").writeText(
                 """
                 package de.nielsfalk.dataTables
 
                 @Target(AnnotationTarget.EXPRESSION)
                 @Retention(AnnotationRetention.SOURCE)
-                annotation class DataTable(vararg val values: String)
+                annotation class Data(vararg val values: String)
             """.trimIndent()
             )
 
