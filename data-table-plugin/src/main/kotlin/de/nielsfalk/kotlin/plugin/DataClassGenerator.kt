@@ -1,6 +1,6 @@
 package de.nielsfalk.kotlin.plugin
 
-fun DataClassData.generate(eachFunctionNames:List<String> = listOf("each")): String {
+fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): String {
     val constructorProperties =
         parameter.joinToString(",") { it.run { "val $name: T$index" } }
     val outGenericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
@@ -32,7 +32,7 @@ fun DataClassData.generate(eachFunctionNames:List<String> = listOf("each")): Str
                     if (parameter.size == 2)
                         append(
                             """
-                            |            @JvmName("context1_${operator.length}")
+                            |            @JvmName("addRow_${operator.length}")
                             |            infix fun T0.$operator(next: T1) {
                             |                _values += $dataClassName(this, next)
                             |            }
@@ -41,58 +41,51 @@ fun DataClassData.generate(eachFunctionNames:List<String> = listOf("each")): Str
                     else {
                         append(
                             """
-                            |            @JvmName("context1_${operator.length}")
-                            |            infix fun T0.$operator(next: T1) =
+                            |            @JvmName("pair${operator.length}")
+                            |            infix fun <T_0, T_1> T_0.$operator(next: T_1) =
                             |                this to next
                             """.trimMargin()
                         )
-                        (2 until parameter.size).map { i ->
-                            val receiverType = buildString {
-                                append((2..i).joinToString(separator = "<") { "Pair" })
-                                append("<T0, T1>")
-                                append((2 until i).joinToString(separator = "") { ", T$it>" })
-                            }
-                            append("\n\n")
-
-
-                            append(
-                                if (i == parameter.size - 1) {
-                                    val firstParameters = mutableListOf(
-                                        (1 until i).joinToString(separator = ".") { "first" }
-                                    )
-                                    if (parameter.size > 3) {
-                                        (0..i - 3).reversed().forEach {
-                                            firstParameters.add(
-                                                (0..it).joinToString(
-                                                    separator = ".",
-                                                    postfix = ".second"
-                                                ) { "first" }
-                                            )
-                                        }
-                                    }
-
-                                    val firstParameterString = firstParameters.joinToString(", ")
-                                    """
-                                    |            @JvmName("context${i}_${operator.length}")
-                                    |            infix fun $receiverType.$operator(next: T$i) {
-                                    |               _values += $dataClassName($firstParameterString, second, next)   
-                                    |            }
-                                    """.trimMargin()
-                                } else
-                                    """
-                                    |            @JvmName("context${i}_${operator.length}")
-                                    |            infix fun $receiverType.$operator(next: T$i) =
-                                    |               this to next
-                                    """.trimMargin()
-                            )
+                        val receiverType = buildString {
+                            append((2..parameter.lastIndex).joinToString(separator = "<") { "Pair" })
+                            append("<T0, T1>")
+                            append((2 until parameter.lastIndex).joinToString(separator = "") { ", T$it>" })
                         }
+                        append("\n\n")
+
+                        val firstParameters = mutableListOf(
+                            (1 until parameter.lastIndex).joinToString(separator = ".") { "first" }
+                        )
+                        if (parameter.size > 3) {
+                            (0..parameter.lastIndex - 3).reversed().forEach {
+                                firstParameters.add(
+                                    (0..it).joinToString(
+                                        separator = ".",
+                                        postfix = ".second"
+                                    ) { "first" }
+                                )
+                            }
+                        }
+
+                        val firstParameterString = firstParameters.joinToString(", ")
+                        append(
+                            """
+                            |            @JvmName("toRow_${operator.length}")
+                            |            infix fun $receiverType.$operator(next: T${parameter.lastIndex}) {
+                            |               _values += $dataClassName($firstParameterString, second, next)   
+                            |            }
+                            """.trimMargin()
+                        )
                     }
                 }
-
             }
     } else ""
 
-    val eachFunctions = eachFunctionNames.joinToString(prefix = "\n", separator = "\n\n", postfix = "\n") {
+    val eachFunctions = eachFunctionNames.joinToString(
+        prefix = "\n",
+        separator = "\n\n",
+        postfix = "\n"
+    ) {
         """
         |        inline fun $genericTypesWithOut List<$dataClassName$genericTypes>.each(
         |           function: $dataClassName$genericTypes.() -> OUT

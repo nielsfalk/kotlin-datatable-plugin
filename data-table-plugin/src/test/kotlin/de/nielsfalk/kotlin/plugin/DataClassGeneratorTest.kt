@@ -45,36 +45,20 @@ class DataClassGeneratorTest : FreeSpec({
                     val values: List<Spock<T0,T1,T2,T3,T4>>
                         get() = _values.toList()
                     
-                    @JvmName("context1_1")
-                    infix fun T0.ǀ(next: T1) =
+                    @JvmName("pair1")
+                    infix fun <T_0, T_1> T_0.ǀ(next: T_1) =
                         this to next
 
-                    @JvmName("context2_1")
-                    infix fun Pair<T0, T1>.ǀ(next: T2) =
-                       this to next
-
-                    @JvmName("context3_1")
-                    infix fun Pair<Pair<T0, T1>, T2>.ǀ(next: T3) =
-                       this to next
-
-                    @JvmName("context4_1")
+                    @JvmName("toRow_1")
                     infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀ(next: T4) {
                        _values += Spock(first.first.first, first.first.second, first.second, second, next)   
                     }
 
-                    @JvmName("context1_2")
-                    infix fun T0.ǀǀ(next: T1) =
+                    @JvmName("pair2")
+                    infix fun <T_0, T_1> T_0.ǀǀ(next: T_1) =
                         this to next
 
-                    @JvmName("context2_2")
-                    infix fun Pair<T0, T1>.ǀǀ(next: T2) =
-                       this to next
-
-                    @JvmName("context3_2")
-                    infix fun Pair<Pair<T0, T1>, T2>.ǀǀ(next: T3) =
-                       this to next
-
-                    @JvmName("context4_2")
+                    @JvmName("toRow_2")
                     infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀǀ(next: T4) {
                        _values += Spock(first.first.first, first.first.second, first.second, second, next)   
                     }
@@ -122,12 +106,12 @@ class DataClassGeneratorTest : FreeSpec({
                     val values: List<Spock<T0,T1>>
                         get() = _values.toList()
                     
-                    @JvmName("context1_1")
+                    @JvmName("addRow_1")
                     infix fun T0.ǀ(next: T1) {
                         _values += Spock(this, next)
                     }
 
-                    @JvmName("context1_2")
+                    @JvmName("addRow_2")
                     infix fun T0.ǀǀ(next: T1) {
                         _values += Spock(this, next)
                     }

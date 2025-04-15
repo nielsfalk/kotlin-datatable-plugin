@@ -7,7 +7,7 @@ import io.kotest.matchers.shouldBe
 class RockPaperScissorsTest : FreeSpec({
     test(
         @DataTable("first"  , "second" ,  "expectedWinner")
-        TestCase  <Hand     , Hand     ,  Hand?           > {
+        TestCase {
                    Rock     ǀ Rock     ǀǀ null
                    Paper    ǀ Paper    ǀǀ null
                    Scissors ǀ Scissors ǀǀ null
