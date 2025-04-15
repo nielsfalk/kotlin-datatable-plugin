@@ -43,6 +43,7 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
                             }
                             .filter { it.srcDirs.isNotEmpty() }
                     )
+                    eachFunctions.set(extension.eachFunctions.get())
                 }
             }
 
@@ -60,10 +61,12 @@ abstract class DataTableScannerExtension {
     abstract val testSourcesOnly: Property<Boolean>
     abstract val addGeneratedSourcesToSourceSet: Property<Boolean>
     abstract val sourceSets: ListProperty<String>
+    abstract val eachFunctions: ListProperty<String>
 
     init {
         testSourcesOnly.convention(false)
         addGeneratedSourcesToSourceSet.convention(true)
         sourceSets.convention(listOf())
+        eachFunctions.convention(listOf("each"))
     }
 }

@@ -1,6 +1,6 @@
 package de.nielsfalk.kotlin.plugin
 
-fun DataClassData.generate(): String {
+fun DataClassData.generate(eachFunctionNames:List<String> = listOf("each")): String {
     val constructorProperties =
         parameter.joinToString(",") { it.run { "val $name: T$index" } }
     val outGenericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
@@ -9,6 +9,13 @@ fun DataClassData.generate(): String {
             separator = ",",
             postfix = ">"
         ) { it.run { "out T$index" } }
+        ?: ""
+    val genericTypesWithOut = (parameter).takeIf(List<Parameter>::isNotEmpty)
+        ?.joinToString(
+            prefix = "<",
+            separator = ",",
+            postfix = ",OUT>"
+        ) { it.run { "T$index" } }
         ?: ""
     val genericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
         ?.joinToString(
@@ -85,6 +92,15 @@ fun DataClassData.generate(): String {
             }
     } else ""
 
+    val eachFunctions = eachFunctionNames.joinToString(prefix = "\n", separator = "\n\n", postfix = "\n") {
+        """
+        |        inline fun $genericTypesWithOut List<$dataClassName$genericTypes>.each(
+        |           function: $dataClassName$genericTypes.() -> OUT
+        |        ) =
+        |           map { it.function() } 
+        """.trimMargin()
+    }
+
     val result = """
         ${packageString?.let { "package $it" } ?: ""}
 
@@ -94,7 +110,7 @@ fun DataClassData.generate(): String {
             ${dataClassName}Context$genericTypes()
                 .apply(function)
                 .values
-        
+        $eachFunctions
         class ${dataClassName}Context$genericTypes {
             private val _values = mutableListOf<$dataClassName$genericTypes>()
             val values: List<$dataClassName$genericTypes>

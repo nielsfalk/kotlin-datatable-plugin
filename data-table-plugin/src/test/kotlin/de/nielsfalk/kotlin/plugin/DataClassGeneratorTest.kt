@@ -35,6 +35,11 @@ class DataClassGeneratorTest : FreeSpec({
                         .apply(function)
                         .values
 
+                inline fun <T0,T1,T2,T3,T4,OUT> List<Spock<T0,T1,T2,T3,T4>>.each(
+                   function: Spock<T0,T1,T2,T3,T4>.() -> OUT
+                ) =
+                   map { it.function() } 
+
                 class SpockContext<T0,T1,T2,T3,T4> {
                     private val _values = mutableListOf<Spock<T0,T1,T2,T3,T4>>()
                     val values: List<Spock<T0,T1,T2,T3,T4>>
@@ -106,6 +111,11 @@ class DataClassGeneratorTest : FreeSpec({
                     SpockContext<T0,T1>()
                         .apply(function)
                         .values
+
+                inline fun <T0,T1,OUT> List<Spock<T0,T1>>.each(
+                   function: Spock<T0,T1>.() -> OUT
+                ) =
+                   map { it.function() } 
 
                 class SpockContext<T0,T1> {
                     private val _values = mutableListOf<Spock<T0,T1>>()

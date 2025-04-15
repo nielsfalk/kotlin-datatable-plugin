@@ -14,6 +14,9 @@ abstract class ScanDataTablesTask : DefaultTask() {
     @get:Input
     abstract val config: ListProperty<ScanDataTablesTaskConfigItem>
 
+    @get:Input
+    abstract val eachFunctions: ListProperty<String>
+
     @TaskAction
     fun scanAndGenerate() {
         config.get().forEach { configEntry ->
@@ -42,7 +45,7 @@ abstract class ScanDataTablesTask : DefaultTask() {
             dataClasses.forEach { dataClassData ->
                 dataClassData.run {
                     outputDirectory.resolve(generatedFileName).writeText(
-                        generate()
+                        generate(eachFunctionNames = eachFunctions.get())
                     )
                 }
             }
