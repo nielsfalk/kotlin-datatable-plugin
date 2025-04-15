@@ -16,50 +16,62 @@ data class DataClassData(
     }___$dataClassName.kt"""
 ) {
     companion object {
+        private fun extractDataClassDataBlocks(text: String): List<String> {
+            val dataAnnotationRegex = Regex("(?m)^.*@Data\\(.*$")
+            val found = dataAnnotationRegex.findAll(text).map { it.groupValues[0] }
+                .toList()
+            val parts = text.split(regex = dataAnnotationRegex).drop(1)
+            return found.zip(parts)
+                .map { (first, second) -> first + second }
+                .mapNotNull { part ->
+                    val indexOpeningBrace = part.indexOf("{")
+                    var braceDepth = 0
+                    for (i in indexOpeningBrace until part.length) {
+                        when (part[i]) {
+                            '{' -> braceDepth++
+                            '}' -> braceDepth--
+                        }
+                        if (braceDepth == 0) {
+                            return@mapNotNull part.substring(0, i)
+                        }
+                    }
+                    null
+                }
+        }
+
+        private fun String.splitToPair(delimiter: String): Pair<String, String>? {
+            val split = split(delimiter, limit = 2)
+            return if (split.size >= 2) return split[0] to split[1]
+            else null
+        }
+
         fun of(path: Path, text: String): List<DataClassData> =
             if (text.contains("@Data") && text.contains("import de.nielsfalk.dataTables.Data")) {
                 val packageString = text.lineSequence().firstOrNull { it.startsWith("package") }
                     ?.removePrefix("package")?.trim()
-                text.split("@Data")
-                    .drop(1)
-                    .mapNotNull { contantAfterAnnotation ->
-                        val lineIterator = contantAfterAnnotation.lineSequence().iterator()
-                        val parameterNames = if (lineIterator.hasNext()) {
-                            Regex("\"(.*?)\"")
-                                .findAll(lineIterator.next())
-                                .map { it.groupValues[1] }
-                                .toList()
-                        } else null
-                        val dataClassName = if (lineIterator.hasNext()) {
-                            val typeParts =
-                                lineIterator.next().split(delimiters = arrayOf("<", "{"), limit = 2)
-                                    .iterator()
-                            val dataClassName =
-                                if (typeParts.hasNext()) typeParts.next().trim() else null
-                            dataClassName
-                        } else null
-                        val lineParameterCount = lineIterator.nextParameterCount()
-                            .takeIf {
-                                while (lineIterator.hasNext()) {
-                                    when (lineIterator.nextParameterCount()) {
-                                        null -> return@takeIf true
-                                        it -> {}
-                                        else -> return@takeIf false
+
+                extractDataClassDataBlocks(text).mapNotNull {
+                    it.splitToPair("@Data(")?.let { (_, afterAnnotation) ->
+                        afterAnnotation.splitToPair(")")
+                            ?.let { (parameterString, afterParameterString) ->
+                                afterParameterString.split(
+                                    delimiters = arrayOf("<", "{"),
+                                    limit = 2
+                                ).firstOrNull()
+                                    ?.let { dataClassName ->
+                                        val parameterNames =
+                                            parameterString.split(",").map { it.replace('"', ' ').trim() }
+                                        DataClassData(
+                                            dataClassName = dataClassName.trim(),
+                                            parameterNames = parameterNames,
+                                            lineParameterCount = parameterNames.size,
+                                            path = path.toString(),
+                                            packageString = packageString,
+                                        )
                                     }
-                                }
-                                true
                             }
-                        dataClassName?.let {
-                            DataClassData(
-                                dataClassName = it,
-                                parameterNames = parameterNames,
-                                lineParameterCount = lineParameterCount,
-                                path = path.toString(),
-                                packageString = packageString,
-                            )
-                        }
                     }
-                    .groupDuplicats()
+                }.groupDuplicats()
             } else listOf()
 
         private fun List<DataClassData>.groupDuplicats(): List<DataClassData> {

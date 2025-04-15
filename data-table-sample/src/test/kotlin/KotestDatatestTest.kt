@@ -7,8 +7,7 @@ import io.kotest.matchers.shouldBe
 
 class KotestDatatestTest : FreeSpec({
     withData(
-        @Data("first"  , "second" ,  "expectedWinner")
-        TestCase {
+        @Data("first"  , "second" ,  "expectedWinner") TestCase {
               Rock     ǀ Rock     ǀǀ null
               Paper    ǀ Paper    ǀǀ null
               Scissors ǀ Scissors ǀǀ null

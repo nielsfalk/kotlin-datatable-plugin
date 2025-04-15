@@ -8,8 +8,7 @@ import io.kotest.matchers.shouldBe
  */
 class HelloSpockTest : FreeSpec({
     "length of Spock's and his friends' names" - {
-        @Data("name"   , "expectedLength")
-        Spock {
+        @Data("name"   , "expectedLength") Spock {
               "Spock"  ǀ 5
               "Kirk"   ǀ 4
               "Scotty" ǀ 6
