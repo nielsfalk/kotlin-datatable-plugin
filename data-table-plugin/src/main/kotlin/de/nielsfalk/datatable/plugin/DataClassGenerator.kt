@@ -93,11 +93,19 @@ fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): St
         |           map { it.function() } 
         """.trimMargin()
     }
+    val toStringFun = parameterNames?.joinToString(
+        prefix = "override fun toString() = \"",
+        separator = ", ",
+        postfix = "\""
+    ) { "$it=\$$it" }
+        ?: ""
 
     val result = """
         ${packageString?.let { "package $it" } ?: ""}
 
-        data class $dataClassName$outGenericTypes($constructorProperties)
+        data class $dataClassName$outGenericTypes($constructorProperties){
+            $toStringFun
+        }
         
         fun $genericTypes ${dataClassName}(function: ${dataClassName}Context$genericTypes.() -> Unit): List<$dataClassName$genericTypes> =
             ${dataClassName}Context$genericTypes()

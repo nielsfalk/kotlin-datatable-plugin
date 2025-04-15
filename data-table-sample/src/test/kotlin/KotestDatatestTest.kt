@@ -25,6 +25,9 @@ class KotestDatatestTest : FreeSpec({
     }
 })
 
+data class Foo(val foo: String){
+    override fun toString() = "Foo(foo='$foo')"
+}
 
 enum class Hand {
     Rock, Paper, Scissors

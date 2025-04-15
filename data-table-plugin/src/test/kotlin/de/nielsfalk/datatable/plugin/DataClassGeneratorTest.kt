@@ -28,7 +28,9 @@ class DataClassGeneratorTest : FreeSpec({
             """
                 package de.nielsfalk.dataTables.plugin
 
-                data class Spock<out T0,out T1,out T2,out T3,out T4>(val name: T0,val length: T1,val truthy: T2,val aLong: T3,val aFloat: T4)
+                data class Spock<out T0,out T1,out T2,out T3,out T4>(val name: T0,val length: T1,val truthy: T2,val aLong: T3,val aFloat: T4){
+                    override fun toString() = "name=${'$'}name, length=${'$'}length, truthy=${'$'}truthy, aLong=${'$'}aLong, aFloat=${'$'}aFloat"
+                }
 
                 fun <T0,T1,T2,T3,T4> Spock(function: SpockContext<T0,T1,T2,T3,T4>.() -> Unit): List<Spock<T0,T1,T2,T3,T4>> =
                     SpockContext<T0,T1,T2,T3,T4>()
@@ -89,7 +91,9 @@ class DataClassGeneratorTest : FreeSpec({
             """
                 package de.nielsfalk.dataTables.plugin
 
-                data class Spock<out T0,out T1>(val name: T0,val length: T1)
+                data class Spock<out T0,out T1>(val name: T0,val length: T1){
+                    override fun toString() = "name=${'$'}name, length=${'$'}length"
+                }
 
                 fun <T0,T1> Spock(function: SpockContext<T0,T1>.() -> Unit): List<Spock<T0,T1>> =
                     SpockContext<T0,T1>()
