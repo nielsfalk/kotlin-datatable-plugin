@@ -13,7 +13,7 @@ class HelloSpockTest : FreeSpec({
               "Kirk"   ǀ 4
               "Scotty" ǀ 6
         }.each {
-            "${name}s name has length $expectedLength" {
+            "${name}'s name has length $expectedLength" {
                 name.length shouldBe expectedLength
             }
         }
