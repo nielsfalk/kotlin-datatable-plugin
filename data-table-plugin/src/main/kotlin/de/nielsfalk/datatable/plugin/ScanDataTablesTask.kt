@@ -1,4 +1,4 @@
-package de.nielsfalk.kotlin.plugin
+package de.nielsfalk.datatable.plugin
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.ListProperty

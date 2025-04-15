@@ -1,4 +1,4 @@
-package de.nielsfalk.kotlin.plugin
+package de.nielsfalk.datatable.plugin
 
 import java.nio.file.Path
 

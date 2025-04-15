@@ -13,7 +13,7 @@ gradlePlugin {
     plugins {
         create("dataTableScanner") {
             id = "de.nielsfalk.kotlin.data-table-scanner"
-            implementationClass = "de.nielsfalk.kotlin.plugin.DataTableScannerPlugin"
+            implementationClass = "de.nielsfalk.datatable.plugin.DataTableScannerPlugin"
             displayName = "Data Table Scanner Plugin"
             description = "Scans Kotlin files for @Data and generates a List of data classes"
         }

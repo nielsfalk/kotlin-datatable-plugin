@@ -1,4 +1,4 @@
-package de.nielsfalk.kotlin.plugin
+package de.nielsfalk.datatable.plugin
 
 fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): String {
     val constructorProperties =

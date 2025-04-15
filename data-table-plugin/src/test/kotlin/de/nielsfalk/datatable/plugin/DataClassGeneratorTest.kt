@@ -1,4 +1,4 @@
-package de.nielsfalk.kotlin.plugin
+package de.nielsfalk.datatable.plugin
 
 import io.kotest.core.spec.style.FreeSpec
 import java.nio.file.Paths
