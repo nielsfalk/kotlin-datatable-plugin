@@ -11,8 +11,8 @@ version = "0.1.0"
 
 gradlePlugin {
     plugins {
-        create("dataTableScanner") {
-            id = "de.nielsfalk.kotlin.data-table-scanner"
+        create("dataTables") {
+            id = "de.nielsfalk.kotlin.data-table-plugin"
             implementationClass = "de.nielsfalk.datatable.plugin.DataTableScannerPlugin"
             displayName = "Data Table Scanner Plugin"
             description = "Scans Kotlin files for @Data and generates a List of data classes"
