@@ -71,3 +71,4 @@ And now you can start writing and executing
       "one" ǀ "two"
 }
 ```
+![kodee-electrified.png](kodee-electrified.png)

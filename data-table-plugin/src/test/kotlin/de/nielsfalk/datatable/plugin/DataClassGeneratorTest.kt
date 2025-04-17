@@ -12,7 +12,7 @@ class DataClassGeneratorTest : FreeSpec({
             path,
             """
                 package de.nielsfalk.dataTables.plugin
-                import de.nielsfalk.dataTables.DataTable
+                import de.nielsfalk.dataTables.Data
     
                 @Data("name"  ,"length", "truthy", "aLong", "aFloat")
                 Spock<String  , Int    , Boolean , Long   , Float   >{
@@ -75,7 +75,7 @@ class DataClassGeneratorTest : FreeSpec({
             path,
             """
                 package de.nielsfalk.dataTables.plugin
-                import de.nielsfalk.dataTables.DataTable
+                import de.nielsfalk.dataTables.Data
     
                 @Data("name"  ,"length")
                 Spock<String  , Int    >{
