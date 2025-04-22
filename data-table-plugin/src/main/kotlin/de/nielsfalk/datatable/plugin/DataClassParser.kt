@@ -3,7 +3,7 @@ package de.nielsfalk.datatable.plugin
 import java.nio.file.Path
 
 fun extractDataClassDataBlocks(text: String): List<String> =
-    if (text.contains("\nimport de.nielsfalk.dataTables.Data\n")) {
+    if (text.contains("import de.nielsfalk.dataTables.Data\n")) {
         val dataAnnotationRegex = Regex("(?m)^.*@Data\\(.*$")
         val found = dataAnnotationRegex.findAll(text).map { it.groupValues[0] }
             .toList()
@@ -19,7 +19,7 @@ fun extractDataClassDataBlocks(text: String): List<String> =
                         '}' -> braceDepth--
                     }
                     if (braceDepth == 0) {
-                        return@mapNotNull part.substring(0, i)
+                        return@mapNotNull part.substring(0, minOf(i+1, part.length))
                     }
                 }
                 null
@@ -37,6 +37,40 @@ fun String?.splitToPair(delimiter: String): Pair<String?, String?> =
             else -> split[0] to split[1]
         }
     }
+
+fun String?.splitKeepingDelimiters(vararg delimiters: String): List<String> {
+    if (isNullOrEmpty()) return listOf()
+
+    // Sort delimiters by length descending to match longest ones first
+    val sortedDelimiters = delimiters.sortedByDescending { it.length }
+
+    val result = mutableListOf<String>()
+    var i = 0
+
+    while (i < length) {
+        var matched = false
+
+        for (delim in sortedDelimiters) {
+            if (i + delim.length <= length && substring(i, i + delim.length) == delim) {
+                result.add(delim)
+                i += delim.length
+                matched = true
+                break
+            }
+        }
+
+        if (!matched) {
+            val start = i
+            while (i < length && sortedDelimiters.none { delim ->
+                    i + delim.length <= length && substring(i, i + delim.length) == delim
+                }) {
+                i++
+            }
+            result.add(substring(start, i))
+        }
+    }
+    return result
+}
 
 fun readDataClassData(
     text: String,
