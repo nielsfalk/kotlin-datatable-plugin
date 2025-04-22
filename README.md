@@ -64,6 +64,10 @@ In your build.gradle.kts you need to add the plugin
 plugins {
     id("de.nielsfalk.kotlin.data-table-plugin") version "0.1.0"
 }
+
+tasks.named("compileKotlin") {
+    dependsOn("scanDataTables")
+}
 ```
 And now you can start writing and executing
 ```kotlin
@@ -71,4 +75,8 @@ And now you can start writing and executing
       "one" ǀ "two"
 }
 ```
+For nice reformatting execute
+
+`./gradlew formatDataTables`
+
 ![kodee-electrified.png](kodee-electrified.png)

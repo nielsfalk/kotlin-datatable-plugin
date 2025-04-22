@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.SourceSet
 
 
 abstract class DataTableScannerPlugin : Plugin<Project> {
@@ -13,20 +14,21 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
         val extension =
             project.extensions.create("dataTableScanner", DataTableScannerExtension::class.java)
 
+        project.tasks.register("formatDataTables", FormatDataTablesTask::class.java) {
+            project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
+                config.set(
+                    getFilteredSourceSets(extension).flatMap {
+                        it.allSource.srcDirs.map { it.absolutePath }
+                            .filter { it.endsWith("/kotlin") }
+                    }
+                )
+            }
+        }
         val taskProvider =
             project.tasks.register("scanDataTables", ScanDataTablesTask::class.java) {
                 project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
-                    val testSourcesOnly = extension.testSourcesOnly.get()
-                    val sourceSetNames = extension.sourceSets.get()
-                        .takeIf { it.isNotEmpty() }
-                        ?: listOfNotNull(
-                            if (testSourcesOnly) null else "main",
-                            if (testSourcesOnly) null else "commonMain",
-                            "test",
-                            "commonTest"
-                        )
                     config.set(
-                        sourceSets.filter { it.name in sourceSetNames }
+                        getFilteredSourceSets(extension)
                             .map { sourceSet ->
                                 val outputDir = "generated/dataTable-${sourceSet.name}"
                                 ScanDataTablesTaskConfigItem(
@@ -34,7 +36,9 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
                                     srcDirs = sourceSet.allSource.srcDirs.map { it.absolutePath }
                                         .filter { it.endsWith("/kotlin") },
                                     outputDirectory = outputDir,
-                                    outputDirectoryAbsolut = project.layout.buildDirectory.dir(outputDir)
+                                    outputDirectoryAbsolut = project.layout.buildDirectory.dir(
+                                        outputDir
+                                    )
                                         .get().asFile.also {
                                             it.mkdirs()
                                         }
@@ -54,6 +58,21 @@ abstract class DataTableScannerPlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    private fun JavaPluginExtension.getFilteredSourceSets(
+        extension: DataTableScannerExtension
+    ): List<SourceSet> {
+        val testSourcesOnly = extension.testSourcesOnly.get()
+        val sourceSetNames = extension.sourceSets.get()
+            .takeIf { it.isNotEmpty() }
+            ?: listOfNotNull(
+                if (testSourcesOnly) null else "main",
+                if (testSourcesOnly) null else "commonMain",
+                "test",
+                "commonTest"
+            )
+        return sourceSets.filter { it.name in sourceSetNames }
     }
 }
 
