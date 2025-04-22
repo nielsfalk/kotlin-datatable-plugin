@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "data-table-root"
-include(":data-table-plugin", ":data-table-sample")
+include(":data-table-plugin")

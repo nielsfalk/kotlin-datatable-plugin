@@ -79,4 +79,8 @@ For nice reformatting execute
 
 `./gradlew formatDataTables`
 
+## samples
+
+ - [jvm sample](samples/data-table-sample-jvm/README.md)
+
 ![kodee-electrified.png](kodee-electrified.png)
