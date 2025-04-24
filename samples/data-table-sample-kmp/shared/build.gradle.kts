@@ -53,9 +53,9 @@ android {
 }
 
 tasks.named("compileKotlinJvm") {
-    dependsOn("scanDataTables")
+    dependsOn("generateDataTables")
 }
 
 dataTableScanner{
-    sourceSets = listOf("commonTest")
+    sourceSets = listOf("commonTest","jsTest")
 }

@@ -66,7 +66,7 @@ plugins {
 }
 
 tasks.named("compileKotlin") {
-    dependsOn("scanDataTables")
+    dependsOn("generateDataTables")
 }
 ```
 And now you can start writing and executing

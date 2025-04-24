@@ -10,9 +10,9 @@ import java.nio.file.Files
 import kotlin.io.path.isRegularFile
 import kotlin.io.path.readText
 
-abstract class ScanDataTablesTask : DefaultTask() {
+abstract class DataTablesGeneratorTask : DefaultTask() {
     @get:Input
-    abstract val config: ListProperty<ScanDataTablesTaskConfigItem>
+    abstract val config: ListProperty<DataTablesGeneratorTaskConfigItem>
 
     @get:Input
     abstract val eachFunctions: ListProperty<String>
@@ -66,7 +66,7 @@ abstract class ScanDataTablesTask : DefaultTask() {
     }
 }
 
-data class ScanDataTablesTaskConfigItem(
+data class DataTablesGeneratorTaskConfigItem(
     val name: String,
     val outputDirectory: String,
     val outputDirectoryAbsolut: String,

@@ -15,7 +15,7 @@ abstract class DataTablePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val extension =
-            project.extensions.create("dataTableScanner", DataTableScannerExtension::class.java)
+            project.extensions.create("dataTableScanner", DataTableExtension::class.java)
 
         project.tasks.register("formatDataTables", FormatDataTablesTask::class.java) {
             project.withSourceSets { sourceDir ->
@@ -29,13 +29,13 @@ abstract class DataTablePlugin : Plugin<Project> {
         }
 
         val taskProvider =
-            project.tasks.register("scanDataTables", ScanDataTablesTask::class.java) {
+            project.tasks.register("generateDataTables", DataTablesGeneratorTask::class.java) {
                 project.withSourceSets { sourceDir ->
                     config.set(
                         sourceDir.getFilteredSourceSets(extension)
                             .map { sourceSet ->
                                 val outputDir = "generated/dataTable-${sourceSet.name}"
-                                ScanDataTablesTaskConfigItem(
+                                DataTablesGeneratorTaskConfigItem(
                                     name = sourceSet.name,
                                     srcDirs = sourceSet.srcDirs.map { it.absolutePath }
                                         .filter { it.endsWith("/kotlin") },
@@ -118,7 +118,7 @@ abstract class DataTablePlugin : Plugin<Project> {
     }
 
     private fun List<SourceSetWrapper>.getFilteredSourceSets(
-        extension: DataTableScannerExtension
+        extension: DataTableExtension
     ): List<SourceSetWrapper> {
         val testSourcesOnly = extension.testSourcesOnly.get()
         val sourceSetNames = extension.sourceSets.get()
@@ -145,7 +145,7 @@ abstract class DataTablePlugin : Plugin<Project> {
     }
 }
 
-abstract class DataTableScannerExtension {
+abstract class DataTableExtension {
     abstract val testSourcesOnly: Property<Boolean>
     abstract val addGeneratedSourcesToSourceSet: Property<Boolean>
     abstract val sourceSets: ListProperty<String>
