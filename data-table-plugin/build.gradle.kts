@@ -13,8 +13,8 @@ gradlePlugin {
     plugins {
         create("dataTables") {
             id = "de.nielsfalk.kotlin.data-table-plugin"
-            implementationClass = "de.nielsfalk.datatable.plugin.DataTableScannerPlugin"
-            displayName = "Data Table Scanner Plugin"
+            implementationClass = "de.nielsfalk.datatable.plugin.DataTablePlugin"
+            displayName = "Kotlin cd ..Data Table Plugin"
             description = "Scans Kotlin files for @Data and generates a List of data classes"
         }
     }
@@ -31,6 +31,7 @@ repositories {
 }
 
 dependencies {
+    implementation(kotlin("gradle-plugin", version = "1.9.23"))
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")
