@@ -2,7 +2,7 @@ package de.nielsfalk.datatable.plugin
 
 fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): String {
     val constructorProperties =
-        parameter.joinToString(",") { it.run { "val $name: T$index" } }
+        parameter.joinToString(",") { it.run { "val `$name`: T$index" } }
     val outGenericTypes = parameter.takeIf(List<Parameter>::isNotEmpty)
         ?.joinToString(
             prefix = "<",
@@ -94,7 +94,7 @@ fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): St
         prefix = "override fun toString() = \"",
         separator = ", ",
         postfix = "\""
-    ) { "$it=\$$it" }
+    ) { "$it=\$`$it`" }
         ?: ""
 
     val result = """
