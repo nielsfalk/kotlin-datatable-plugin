@@ -31,8 +31,17 @@ abstract class DataTablePlugin : Plugin<Project> {
         val taskProvider =
             project.tasks.register("generateDataTables", DataTablesGeneratorTask::class.java) {
                 project.withSourceSets { sourceDir ->
+                    val filteredSourceSets = sourceDir.getFilteredSourceSets(extension)
+                    val sourceSetNames = filteredSourceSets.map { it.name }
+                    val generateAnnotationInSourceSetNames:List<String> = when {
+                        "main" in sourceSetNames -> listOf("main")
+                        "commonMain" in sourceSetNames -> listOf("commonMain")
+                        "test" in sourceSetNames -> listOf("test")
+                        "commonTest" in sourceSetNames -> listOf("commonTest")
+                        else -> sourceSetNames
+                    }
                     config.set(
-                        sourceDir.getFilteredSourceSets(extension)
+                        filteredSourceSets
                             .map { sourceSet ->
                                 val outputDir = "generated/dataTable-${sourceSet.name}"
                                 DataTablesGeneratorTaskConfigItem(
@@ -47,6 +56,7 @@ abstract class DataTablePlugin : Plugin<Project> {
                                             it.mkdirs()
                                         }
                                         .absolutePath,
+                                    generateAnnotation = sourceSet.name in generateAnnotationInSourceSetNames
                                 )
                             }
                             .filter { it.srcDirs.isNotEmpty() }

@@ -50,16 +50,17 @@ abstract class DataTablesGeneratorTask : DefaultTask() {
                 }
             }
 
-
-            outputDirectory.resolve("DataAnnotation.kt").writeText(
-                """
-                package de.nielsfalk.dataTables
-
-                @Target(AnnotationTarget.EXPRESSION)
-                @Retention(AnnotationRetention.SOURCE)
-                annotation class Data(vararg val values: String)
-            """.trimIndent()
-            )
+            if (configEntry.generateAnnotation){
+                outputDirectory.resolve("DataAnnotation.kt").writeText(
+                    """
+                    package de.nielsfalk.dataTables
+    
+                    @Target(AnnotationTarget.EXPRESSION)
+                    @Retention(AnnotationRetention.SOURCE)
+                    annotation class Data(vararg val values: String)
+                    """.trimIndent()
+                )
+            }
 
             println("✅ Generated: ${outputDirectory.absolutePath}")
         }
@@ -70,5 +71,6 @@ data class DataTablesGeneratorTaskConfigItem(
     val name: String,
     val outputDirectory: String,
     val outputDirectoryAbsolut: String,
-    val srcDirs: List<String>
+    val srcDirs: List<String>,
+    val generateAnnotation: Boolean
 )
