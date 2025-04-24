@@ -3,6 +3,7 @@ plugins {
     `java-library`
     `java-gradle-plugin`
     `maven-publish`
+    id("com.gradle.plugin-publish") version "1.3.1"
     kotlin("jvm") version "1.9.23" // Match your Kotlin version
 }
 
@@ -10,12 +11,26 @@ group = "de.nielsfalk.kotlin"
 version = "0.1.0"
 
 gradlePlugin {
+    // Shown on the plugin portal
+    website = "https://github.com/nielsfalk/kotlin-datatable-plugin"
+    vcsUrl = "https://github.com/nielsfalk/kotlin-datatable-plugin.git"
+
     plugins {
         create("dataTables") {
-            id = "de.nielsfalk.kotlin.data-table-plugin"
+            id = "de.nielsfalk.kotlin.datatable"
             implementationClass = "de.nielsfalk.datatable.plugin.DataTablePlugin"
-            displayName = "Kotlin cd ..Data Table Plugin"
-            description = "Scans Kotlin files for @Data and generates a List of data classes"
+            displayName = "Kotlin Data Table Plugin"
+            description = "Scans Kotlin files for data-tables and generate the code so this feature can be use."
+            tags.set(
+                listOf(
+                    "kotlin",
+                    "codegen",
+                    "datatables",
+                    "spock",
+                    "test",
+                    "parameterized test"
+                )
+            )
         }
     }
 }

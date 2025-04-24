@@ -62,7 +62,7 @@ Types are inferred.
 In your build.gradle.kts you need to add the plugin
 ```kotlin
 plugins {
-    id("de.nielsfalk.kotlin.data-table-plugin") version "0.1.0"
+    id("de.nielsfalk.kotlin.datatable") version "0.1.0"
 }
 
 tasks.named("compileKotlin") {
