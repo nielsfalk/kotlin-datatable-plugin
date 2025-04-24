@@ -47,20 +47,16 @@ class DataClassGeneratorTest : FreeSpec({
                     val values: List<Spock<T0,T1,T2,T3,T4>>
                         get() = _values.toList()
                     
-                    @JvmName("pair1")
                     infix fun <T_0, T_1> T_0.ǀ(next: T_1) =
                         this to next
 
-                    @JvmName("toRow_1")
                     infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀ(next: T4) {
                        _values += Spock(first.first.first, first.first.second, first.second, second, next)   
                     }
 
-                    @JvmName("pair2")
                     infix fun <T_0, T_1> T_0.ǀǀ(next: T_1) =
                         this to next
 
-                    @JvmName("toRow_2")
                     infix fun Pair<Pair<Pair<T0, T1>, T2>, T3>.ǀǀ(next: T4) {
                        _values += Spock(first.first.first, first.first.second, first.second, second, next)   
                     }
@@ -110,12 +106,10 @@ class DataClassGeneratorTest : FreeSpec({
                     val values: List<Spock<T0,T1>>
                         get() = _values.toList()
                     
-                    @JvmName("addRow_1")
                     infix fun T0.ǀ(next: T1) {
                         _values += Spock(this, next)
                     }
 
-                    @JvmName("addRow_2")
                     infix fun T0.ǀǀ(next: T1) {
                         _values += Spock(this, next)
                     }

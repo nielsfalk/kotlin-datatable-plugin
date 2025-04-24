@@ -32,7 +32,6 @@ fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): St
                     if (parameter.size == 2)
                         append(
                             """
-                            |            @JvmName("addRow_${operator.length}")
                             |            infix fun T0.$operator(next: T1) {
                             |                _values += $dataClassName(this, next)
                             |            }
@@ -41,7 +40,6 @@ fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): St
                     else {
                         append(
                             """
-                            |            @JvmName("pair${operator.length}")
                             |            infix fun <T_0, T_1> T_0.$operator(next: T_1) =
                             |                this to next
                             """.trimMargin()
@@ -70,7 +68,6 @@ fun DataClassData.generate(eachFunctionNames: List<String> = listOf("each")): St
                         val firstParameterString = firstParameters.joinToString(", ")
                         append(
                             """
-                            |            @JvmName("toRow_${operator.length}")
                             |            infix fun $receiverType.$operator(next: T${parameter.lastIndex}) {
                             |               _values += $dataClassName($firstParameterString, second, next)   
                             |            }
