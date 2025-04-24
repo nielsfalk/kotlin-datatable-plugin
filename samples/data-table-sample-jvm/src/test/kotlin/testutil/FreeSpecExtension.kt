@@ -1,4 +1,4 @@
-package de.nielsfalk.datatable.testutil
+package testutil
 
 fun <E> List<E>.applyNames(
     keySelector: (E) -> Any = { it.toString() }
