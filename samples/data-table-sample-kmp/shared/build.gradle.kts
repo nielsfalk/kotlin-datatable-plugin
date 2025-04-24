@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.multiplatform)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.datatable)
 }
 
 group = "de.nielsfalk.kotlin.data-tables.kmp-sample"
@@ -49,4 +50,12 @@ android {
     defaultConfig {
         minSdk = 21
     }
+}
+
+tasks.named("compileKotlinJvm") {
+    dependsOn("scanDataTables")
+}
+
+dataTableScanner{
+    sourceSets = listOf("commonTest")
 }

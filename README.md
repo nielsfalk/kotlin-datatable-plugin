@@ -82,5 +82,6 @@ For nice reformatting execute
 ## samples
 
  - [jvm sample](samples/data-table-sample-jvm/README.md)
+ - [kmp sample](samples/data-table-sample-kmp/README.md)
 
 ![kodee-electrified.png](kodee-electrified.png)

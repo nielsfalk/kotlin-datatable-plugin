@@ -4,6 +4,7 @@ kotlin = "2.1.0"
 agp = "8.6.1"
 compose = "1.7.3"
 androidx-activityCompose = "1.9.3"
+data-tables-version = "0.1.0"
 
 [libraries]
 
@@ -16,3 +17,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
+datatable = { id = "de.nielsfalk.kotlin.data-table-plugin", version.ref = "data-tables-version"}
+
