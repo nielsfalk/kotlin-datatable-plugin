@@ -7,7 +7,7 @@ plugins {
     kotlin("jvm") version "1.9.23" // Match your Kotlin version
 }
 
-group = "de.nielsfalk.kotlin"
+group = "io.github.nielsfalk"
 version = "0.1.0"
 
 gradlePlugin {
@@ -17,10 +17,10 @@ gradlePlugin {
 
     plugins {
         create("dataTables") {
-            id = "de.nielsfalk.kotlin.datatable"
+            id = "io.github.nielsfalk.datatable"
             implementationClass = "de.nielsfalk.datatable.plugin.DataTablePlugin"
             displayName = "Kotlin Data Table Plugin"
-            description = "Scans Kotlin files for data-tables and generate the code so this feature can be use."
+            description = "Scans Kotlin files for data-tables and generate the code so this feature can be used."
             tags.set(
                 listOf(
                     "kotlin",

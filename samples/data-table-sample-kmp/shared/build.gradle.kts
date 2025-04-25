@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.datatable)
 }
 
-group = "de.nielsfalk.kotlin.data-tables.kmp-sample"
+group = "io.github.nielsfalk"
 version = "1.0.0"
 
 kotlin {
@@ -44,7 +44,7 @@ kotlin {
 }
 
 android {
-    namespace = "de.nielsfalk.kotlin.datatables.kmpsample"
+    namespace = "io.github.nielsfalk.datatables.kmpsample"
     compileSdk = 35
 
     defaultConfig {

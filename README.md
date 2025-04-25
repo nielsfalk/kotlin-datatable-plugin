@@ -62,7 +62,7 @@ Types are inferred.
 In your build.gradle.kts you need to add the plugin
 ```kotlin
 plugins {
-    id("de.nielsfalk.kotlin.datatable") version "0.1.0"
+    id("io.github.nielsfalk.datatable") version "0.1.0"
 }
 
 tasks.named("compileKotlin") {
@@ -81,7 +81,7 @@ For nice reformatting execute
 
 ## samples
 
- - [jvm sample](samples/data-table-sample-jvm/README.md)
- - [kmp sample](samples/data-table-sample-kmp/README.md)
+ - [jvm sample](samples/data-table-sample-jvm/)
+ - [kmp sample](samples/data-table-sample-kmp/)
 
 ![kodee-electrified.png](kodee-electrified.png)

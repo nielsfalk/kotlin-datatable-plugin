@@ -1,9 +1,9 @@
 plugins {
     kotlin("jvm") version "2.1.20"
-    id("de.nielsfalk.kotlin.datatable") version "0.1.0"
+    id("io.github.nielsfalk.datatable") version "0.1.0"
 }
 
-group = "de.nielsfalk.kotlin.data-tables.sample"
+group = "io.github.nielsfalk"
 version = "1.0-SNAPSHOT"
 
 repositories {

@@ -17,5 +17,5 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
-datatable = { id = "de.nielsfalk.kotlin.datatable", version.ref = "datatables-version"}
+datatable = { id = "io.github.nielsfalk.datatable", version.ref = "datatables-version"}
 
