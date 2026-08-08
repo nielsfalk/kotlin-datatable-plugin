@@ -44,21 +44,6 @@ data class Parameter(
 )
 
 
-private fun Iterator<String>.nextParameterCount(): Int? {
-    while (hasNext()) {
-        val line = next()
-        if (line.isNotBlank()) {
-            return if (line.contains(singleDataSeperator))
-                line.split(doubleDataSeperator).flatMap { it.split(singleDataSeperator) }.count()
-            else {
-                null
-            }
-        }
-    }
-    return null
-}
-
-
 fun List<DataClassData>.groupByClass(): List<DataClassData> =
     groupBy { it.generatedFileName }
         .values
