@@ -15,8 +15,8 @@ class SetPackageOfGeneratedDataClass : FreeSpec({
     }
 
     "re use data class via import" {
-        val list = @Data("foo" , "bar") Spock{
-                         1     ǀ 2
+        val list = @Data("name" , "expectedLength") Spock{
+                         1      ǀ 2
         }
 
         list.first().shouldBeInstanceOf<Spock<Int, Int>>()
