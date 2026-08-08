@@ -45,4 +45,140 @@ class DataClassDataTest : FreeSpec({
             generatedFileName = "___de_nielsfalk_dataTables_plugin___Spock.kt"
         )
     }
+
+    "parse dataTable in default package" {
+        val text = """
+           import de.nielsfalk.dataTables.Data
+
+
+            fun main() {
+                @Data("name"  ,"length", "truthy")
+                Spock<String  , Int    , Boolean > {
+                      "sdfsd" ǀ 15     ǀ true
+                      "dfsff" ǀ 12     ǀ true
+                }
+            }
+        """.trimIndent()
+
+        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
+        result shouldBeEqual DataClassData(
+            dataClassName = "Spock",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = null,
+            generatedFileName = "______Spock.kt"
+        )
+    }
+
+    "parse dataTable with import to qualify data class in default package" {
+        val text = """
+            package de.nielsfalk.dataTables.plugin
+
+            import de.nielsfalk.dataTables.Data
+            import Spock
+
+
+            fun main() {
+                @Data("name"  ,"length", "truthy")
+                Spock<String  , Int    , Boolean > {
+                      "sdfsd" ǀ 15     ǀ true
+                      "dfsff" ǀ 12     ǀ true
+                }
+            }
+        """.trimIndent()
+
+        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
+        result shouldBeEqual DataClassData(
+            dataClassName = "Spock",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = null,
+            generatedFileName = "______Spock.kt"
+        )
+    }
+
+    "parse dataTable with import to qualify data class" {
+        val text = """
+            package de.nielsfalk.dataTables.plugin
+
+            import de.nielsfalk.dataTables.Data
+            import com.startrek.Spock
+
+
+            fun main() {
+                @Data("name"  ,"length", "truthy")
+                Spock<String  , Int    , Boolean > {
+                      "sdfsd" ǀ 15     ǀ true
+                      "dfsff" ǀ 12     ǀ true
+                }
+            }
+        """.trimIndent()
+
+        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
+        result shouldBeEqual DataClassData(
+            dataClassName = "Spock",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = "com.startrek",
+            generatedFileName = "___com_startrek___Spock.kt"
+        )
+    }
+
+    "parse dataTable with import as to qualify data class" {
+        val text = """
+            package de.nielsfalk.dataTables.plugin
+
+            import de.nielsfalk.dataTables.Data
+            import com.startrek.Someone as Spock
+
+
+            fun main() {
+                @Data("name"  ,"length", "truthy")
+                Spock<String  , Int    , Boolean > {
+                      "sdfsd" ǀ 15     ǀ true
+                      "dfsff" ǀ 12     ǀ true
+                }
+            }
+        """.trimIndent()
+
+        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
+        result shouldBeEqual DataClassData(
+            dataClassName = "Someone",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = "com.startrek",
+            generatedFileName = "___com_startrek___Someone.kt"
+        )
+    }
+
+    "parse dataTable with qualified name" {
+        val text = """
+            package de.nielsfalk.dataTables.plugin
+
+            import de.nielsfalk.dataTables.Data
+
+
+            fun main() {
+                @Data(             "name"  ,"length", "truthy")
+                com.starterk.Spock<String  , Int    , Boolean > {
+                                   "sdfsd" ǀ 15     ǀ true
+                                   "dfsff" ǀ 12     ǀ true
+                }
+            }
+        """.trimIndent()
+
+        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
+        result shouldBeEqual DataClassData(
+            dataClassName = "Spock",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = "com.starterk",
+            generatedFileName = "___com_starterk___Spock.kt"
+        )
+    }
 })

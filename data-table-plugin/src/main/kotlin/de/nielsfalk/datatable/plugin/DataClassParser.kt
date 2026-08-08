@@ -19,12 +19,12 @@ fun extractDataClassDataBlocks(text: String): List<String> =
                         '}' -> braceDepth--
                     }
                     if (braceDepth == 0) {
-                        return@mapNotNull part.substring(0, minOf(i+1, part.length))
+                        return@mapNotNull part.substring(0, minOf(i + 1, part.length))
                     }
                 }
                 null
             }
-    }else  listOf()
+    } else listOf()
 
 fun String?.splitToPair(delimiter: String): Pair<String?, String?> =
     if (this == null)
@@ -84,25 +84,48 @@ fun readDataClassData(
 
 
         val (parameterString, afterParameterString) = afterAnnotation.splitToPair(")")
-        if (parameterString == null){
+        if (parameterString == null) {
             null
-        }else{
+        } else {
             afterParameterString?.split(
                 delimiters = arrayOf("<", "{"),
                 limit = 2
             )?.firstOrNull()
+                ?.trim()
                 ?.let { dataClassName ->
                     val parameterNames =
                         parameterString.split(",")
                             .map { it.replace('"', ' ').trim() }
+
+                    val dataClassQualifiedName = dataClassName.takeIf { it.contains('.') }
+                        ?: text.lineSequence().dataClassWhithQualifiedNameByImport(dataClassName)
+
+                    val (finalDataClassName, finalPackageString) = when {
+                        dataClassQualifiedName != null -> dataClassQualifiedName.run {
+                            if (dataClassQualifiedName.contains('.'))
+                                substringAfterLast(".") to substringBeforeLast(".")
+                            else dataClassQualifiedName to null
+                        }
+
+                        else -> dataClassName to packageString
+                    }
+
                     DataClassData(
-                        dataClassName = dataClassName.trim(),
+                        dataClassName = finalDataClassName,
                         parameterNames = parameterNames,
                         lineParameterCount = parameterNames.size,
                         path = path.toString(),
-                        packageString = packageString,
+                        packageString = finalPackageString,
                     )
                 }
         }
     }
 }
+
+private fun Sequence<String>.dataClassWhithQualifiedNameByImport(
+    dataClassName: String
+): String? =
+    firstOrNull { it.startsWith("import ") && it.trimEnd().endsWith(dataClassName) }
+        ?.removePrefix("import ")
+        ?.substringBeforeLast(" as ")
+        ?.trim()
