@@ -56,13 +56,10 @@ Types are inferred.
 
 ## Use it in your project
 
-> ⚠️ Until the plugin is not published to mavenCentral it is required to push the plugin to you local cache 
-`./gradlew :data-table-plugin:publishToMavenLocal`
-
 In your build.gradle.kts you need to add the plugin
 ```kotlin
 plugins {
-    id("io.github.nielsfalk.datatable") version "0.1.0"
+    id("io.github.nielsfalk.datatable") version "0.2.0"
 }
 
 tasks.named("compileKotlin") {
