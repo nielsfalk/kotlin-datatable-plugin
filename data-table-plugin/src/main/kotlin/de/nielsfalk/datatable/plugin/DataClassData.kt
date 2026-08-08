@@ -65,6 +65,12 @@ fun List<DataClassData>.groupByClass(): List<DataClassData> =
     groupBy { it.generatedFileName }
         .values
         .map { list ->
+            val groupByParameterNames = list.groupBy { it.parameterNames }
+            val groupByParameterCount = list.groupBy { it.lineParameterCount }
+            if (groupByParameterNames.size!= 1 || groupByParameterCount.size != 1) {
+                throw IllegalArgumentException("conflicting data table parameter names $list")
+            }
+
             list.maxBy {
                 if (it.parameterNames == null) 0 else 2 +
                         if (it.lineParameterCount == null) 0 else 1

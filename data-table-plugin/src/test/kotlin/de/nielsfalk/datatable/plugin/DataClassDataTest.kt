@@ -1,9 +1,11 @@
 package de.nielsfalk.datatable.plugin
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.equals.shouldBeEqual
 import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.string.shouldContain
 import java.nio.file.Paths
 
 class DataClassDataTest : FreeSpec({
@@ -180,5 +182,24 @@ class DataClassDataTest : FreeSpec({
             packageString = "com.starterk",
             generatedFileName = "___com_starterk___Spock.kt"
         )
+    }
+
+    "conflict on parameter names"{
+        val dataClassData = DataClassData(
+            dataClassName = "Spock",
+            parameterNames = listOf("name", "length", "truthy"),
+            lineParameterCount = 3,
+            path = "src/aPath.kt",
+            packageString = "com.starterk",
+            generatedFileName = "___com_starterk___Spock.kt"
+        )
+        val list = listOf(
+            dataClassData,
+            dataClassData.copy(parameterNames = listOf("conflict", "on", "names"))
+        )
+
+        shouldThrow<IllegalArgumentException> {
+            list.groupByClass()
+        }.message shouldContain "conflicting data table parameter names"
     }
 })
