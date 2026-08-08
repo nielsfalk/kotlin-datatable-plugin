@@ -113,7 +113,6 @@ fun readDataClassData(
                     DataClassData(
                         dataClassName = finalDataClassName,
                         parameterNames = parameterNames,
-                        lineParameterCount = parameterNames.size,
                         path = path.toString(),
                         packageString = finalPackageString,
                     )

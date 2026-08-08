@@ -5,7 +5,6 @@ import java.nio.file.Path
 data class DataClassData(
     val dataClassName: String,
     val parameterNames: List<String>?,
-    val lineParameterCount: Int?,
     val path: String,
     val packageString: String?,
     val generatedFileName: String = """___${
@@ -17,7 +16,6 @@ data class DataClassData(
 ) {
     val parameter: List<Parameter> by lazy {
         val parameterCount = parameterNames?.count()
-            ?: lineParameterCount
             ?: 0
         (0 until parameterCount).map {
             Parameter(
@@ -66,14 +64,12 @@ fun List<DataClassData>.groupByClass(): List<DataClassData> =
         .values
         .map { list ->
             val groupByParameterNames = list.groupBy { it.parameterNames }
-            val groupByParameterCount = list.groupBy { it.lineParameterCount }
-            if (groupByParameterNames.size!= 1 || groupByParameterCount.size != 1) {
+            if (groupByParameterNames.size!= 1) {
                 throw IllegalArgumentException("conflicting data table parameter names $list")
             }
 
             list.maxBy {
-                if (it.parameterNames == null) 0 else 2 +
-                        if (it.lineParameterCount == null) 0 else 1
+                if (it.parameterNames == null) 0 else 2
             }
         }
 

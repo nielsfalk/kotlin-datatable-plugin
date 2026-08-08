@@ -41,7 +41,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "de.nielsfalk.dataTables.plugin",
             generatedFileName = "___de_nielsfalk_dataTables_plugin___Spock.kt"
@@ -66,7 +65,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = null,
             generatedFileName = "______Spock.kt"
@@ -94,7 +92,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = null,
             generatedFileName = "______Spock.kt"
@@ -122,7 +119,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "com.startrek",
             generatedFileName = "___com_startrek___Spock.kt"
@@ -150,7 +146,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Someone",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "com.startrek",
             generatedFileName = "___com_startrek___Someone.kt"
@@ -177,7 +172,6 @@ class DataClassDataTest : FreeSpec({
         result shouldBeEqual DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "com.starterk",
             generatedFileName = "___com_starterk___Spock.kt"
@@ -188,7 +182,6 @@ class DataClassDataTest : FreeSpec({
         val dataClassData = DataClassData(
             dataClassName = "Spock",
             parameterNames = listOf("name", "length", "truthy"),
-            lineParameterCount = 3,
             path = "src/aPath.kt",
             packageString = "com.starterk",
             generatedFileName = "___com_starterk___Spock.kt"
