@@ -84,13 +84,11 @@ abstract class DataTablePlugin : Plugin<Project> {
     }
 
     fun Project.withSourceSets(function: (List<SourceSetWrapper>) -> Unit) {
-        var foundSourceDirs = false
+        val wrappers = mutableListOf<SourceSetWrapper>()
         project.extensions.findByType(KotlinMultiplatformExtension::class.java)?.apply {
             sourceSets
-                .takeIf { it.isNotEmpty() }
-                ?.map {
-                    foundSourceDirs = true
-                    object : SourceSetWrapper {
+                .forEach {
+                    wrappers.add(object : SourceSetWrapper {
                         override val name: String
                             get() = it.name
 
@@ -100,30 +98,31 @@ abstract class DataTablePlugin : Plugin<Project> {
                         override fun addSrcDirs(vararg srcPaths: Provider<Directory>) {
                             it.kotlin.srcDirs(srcPaths)
                         }
-                    }
+                    })
                 }
-                ?.let (function)
         }
         project.extensions.findByType(JavaPluginExtension::class.java)?.apply {
             sourceSets
-                .takeIf { it.isNotEmpty() }
-                ?.map {
-                    foundSourceDirs = true
-                    object : SourceSetWrapper {
-                        override val name: String
-                            get() = it.name
-                        override val srcDirs: Set<File>
-                            get() = it.allSource.srcDirs
+                .forEach {
+                    val name = it.name
+                    if (wrappers.none { it.name == name }) {
+                        wrappers.add(object : SourceSetWrapper {
+                            override val name: String
+                                get() = name
+                            override val srcDirs: Set<File>
+                                get() = it.allSource.srcDirs
 
-                        override fun addSrcDirs(vararg srcPaths: Provider<Directory>) {
-                            it.java.srcDirs(srcPaths)
-                        }
+                            override fun addSrcDirs(vararg srcPaths: Provider<Directory>) {
+                                it.java.srcDirs(srcPaths)
+                            }
+                        })
                     }
                 }
-                ?.let(function)
         }
-        if (!foundSourceDirs) {
+        if (wrappers.isEmpty()) {
             println("⚠️no sourceSets found")
+        } else {
+            function(wrappers)
         }
     }
 

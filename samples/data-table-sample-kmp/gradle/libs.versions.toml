@@ -1,10 +1,10 @@
 [versions]
 
-kotlin = "2.1.0"
+kotlin = "2.1.20"
 agp = "8.6.1"
 compose = "1.7.3"
 androidx-activityCompose = "1.9.3"
-datatables-version = "0.2.0"
+datatables-version = "0.2.1"
 
 [libraries]
 

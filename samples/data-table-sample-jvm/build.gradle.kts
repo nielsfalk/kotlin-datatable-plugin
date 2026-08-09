@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.20"
-    id("io.github.nielsfalk.datatable") version "0.2.0"
+    id("io.github.nielsfalk.datatable") version "0.2.1"
 }
 
 group = "io.github.nielsfalk"

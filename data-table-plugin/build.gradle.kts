@@ -4,11 +4,11 @@ plugins {
     `java-gradle-plugin`
     `maven-publish`
     id("com.gradle.plugin-publish") version "1.3.1"
-    kotlin("jvm") version "1.9.23" // Match your Kotlin version
+    kotlin("jvm") version "2.1.20" // Match your Kotlin version
 }
 
 group = "io.github.nielsfalk"
-version = "0.2.0"
+version = "0.2.1"
 
 gradlePlugin {
     // Shown on the plugin portal
@@ -46,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("gradle-plugin", version = "1.9.23"))
+    implementation(kotlin("gradle-plugin", version = "2.1.20"))
     testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
     testImplementation("io.kotest:kotest-assertions-core:5.8.0")
     testImplementation("org.junit.platform:junit-platform-launcher:1.10.0")
