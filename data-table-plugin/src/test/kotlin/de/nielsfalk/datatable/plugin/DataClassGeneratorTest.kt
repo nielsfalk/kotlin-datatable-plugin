@@ -2,7 +2,6 @@ package de.nielsfalk.datatable.plugin
 
 import io.kotest.core.spec.style.FreeSpec
 import java.nio.file.Paths
-import kotlin.test.assertEquals
 
 class DataClassGeneratorTest : FreeSpec({
     val path = Paths.get("src/aPath.kt")
@@ -23,9 +22,8 @@ class DataClassGeneratorTest : FreeSpec({
 
         val generated = data.generate()
 
-        //language=kotlin
-        assertEquals(
-            """
+        assert(
+            generated == """
                 package de.nielsfalk.dataTables.plugin
 
                 data class Spock<out T0,out T1,out T2,out T3,out T4>(val `name`: T0,val `length`: T1,val `truthy`: T2,val `aLong`: T3,val `aFloat`: T4){
@@ -61,8 +59,7 @@ class DataClassGeneratorTest : FreeSpec({
                        _values += Spock(first.first.first, first.first.second, first.second, second, next)   
                     }
                 }
-            """.trimIndent(),
-            generated
+            """.trimIndent()
         )
     }
 
@@ -82,9 +79,8 @@ class DataClassGeneratorTest : FreeSpec({
 
         val generated = data.generate()
 
-        //language=kotlin
-        assertEquals(
-            """
+        assert(
+            generated == """
                 package de.nielsfalk.dataTables.plugin
 
                 data class Spock<out T0,out T1>(val `name`: T0,val `length`: T1){
@@ -114,8 +110,7 @@ class DataClassGeneratorTest : FreeSpec({
                         _values += Spock(this, next)
                     }
                 }
-            """.trimIndent(),
-            generated
+            """.trimIndent()
         )
     }
 })

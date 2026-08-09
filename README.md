@@ -5,7 +5,6 @@ brings back the iconic flaver of [spockframeworks](https://spockframework.org/) 
 ```kotlin
 import de.nielsfalk.dataTables.Data
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.shouldBe
 
 class HelloSpockTest : FreeSpec({
     "length of Spock's and his friends' names" - {
@@ -15,7 +14,7 @@ class HelloSpockTest : FreeSpec({
               "Scotty" ǀ 6
         }.each {
             "${name}'s name has length $expectedLength" {
-                name.length shouldBe expectedLength
+                assert(name.length == expectedLength)
             }
         }
     }
@@ -59,7 +58,7 @@ Types are inferred.
 In your build.gradle.kts you need to add the plugin
 ```kotlin
 plugins {
-    id("io.github.nielsfalk.datatable") version "0.2.0"
+    id("io.github.nielsfalk.datatable") version "0.2.1"
 }
 
 tasks.named("compileKotlin") {

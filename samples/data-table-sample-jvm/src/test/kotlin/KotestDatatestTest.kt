@@ -3,7 +3,6 @@ import de.nielsfalk.dataTables.Data
 import testutil.applyNames
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.datatest.withData
-import io.kotest.matchers.shouldBe
 
 class KotestDatatestTest : FreeSpec({
     withData(
@@ -21,7 +20,7 @@ class KotestDatatestTest : FreeSpec({
     ) {
         val result = it.first defend it.second
 
-        result shouldBe it.expectedWinner
+        assert(result == it.expectedWinner)
     }
 })
 

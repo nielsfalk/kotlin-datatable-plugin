@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.20"
+    kotlin("plugin.power-assert") version "2.1.20"
     id("io.github.nielsfalk.datatable") version "0.2.1"
 }
 

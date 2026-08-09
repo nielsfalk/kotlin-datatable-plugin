@@ -1,12 +1,8 @@
 package de.nielsfalk.datatable.plugin
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.equals.shouldBeEqual
-import kotlin.test.assertEquals
 
 class DataClassFormatterTest : FreeSpec({
-
-
 
     "format" {
         val code = """
@@ -19,8 +15,8 @@ class DataClassFormatterTest : FreeSpec({
             }
         """.trimIndent()
 
-        assertEquals(
-            """
+        assert(
+            format(code) == """
                 import de.nielsfalk.dataTables.Data
                 
                 @Data("name"        ,  "expectedLength" , "col3" , "col4" , "col5" , "col6") Spock {
@@ -28,8 +24,7 @@ class DataClassFormatterTest : FreeSpec({
                       "//Kirkiriki" ǀǀ 4                ǀ null   ǀ null   ǀ null   ǀ null
                       "Scotty"      ǀ  6                ǀ 6      ǀ 6      ǀ 6      ǀ 6
                 }
-            """.trimIndent(),
-            format(code)
+            """.trimIndent()
         )
     }
     "format with Dataclass in new line" {
@@ -42,16 +37,15 @@ class DataClassFormatterTest : FreeSpec({
             }
         """.trimIndent()
 
-        assertEquals(
-            """
+        assert(
+            format(code) == """
                 import de.nielsfalk.dataTables.Data
                 
                 @Data(    "name"  , "expectedLength")
                 TestData {
                           "Spock" ǀ 5
                 }
-            """.trimIndent(),
-            format(code)
+            """.trimIndent()
         )
     }
     "format with Types" {
@@ -64,16 +58,15 @@ class DataClassFormatterTest : FreeSpec({
             }
         """.trimIndent()
 
-        assertEquals(
-            """
+        assert(
+            format(code) == """
                 import de.nielsfalk.dataTables.Data
                 
                 @Data(   "name"     , "expectedLength")
                 TestData<String     , Any             > {
                          "Mr.Spock" ǀ 5
                 }
-            """.trimIndent(),
-            format(code)
+            """.trimIndent()
         )
     }
     "format with unknown lines" {
@@ -88,8 +81,8 @@ class DataClassFormatterTest : FreeSpec({
             }
         """.trimIndent()
 
-        assertEquals(
-            """
+        assert(
+            format(code) == """
                 import de.nielsfalk.dataTables.Data
         
                 @Data(   "name"     , "expectedLength")
@@ -98,8 +91,7 @@ class DataClassFormatterTest : FreeSpec({
                 // something in a comment
                          "Mr.Spock" ǀ 5
                 }
-            """.trimIndent(),
-            format(code)
+            """.trimIndent()
         )
     }
 })

@@ -5,6 +5,7 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "1.3.1"
     kotlin("jvm") version "2.1.20" // Match your Kotlin version
+    kotlin("plugin.power-assert") version "2.1.20"
 }
 
 group = "io.github.nielsfalk"

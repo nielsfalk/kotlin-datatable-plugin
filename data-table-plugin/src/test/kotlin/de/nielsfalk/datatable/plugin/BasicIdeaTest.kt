@@ -1,7 +1,6 @@
 package de.nielsfalk.datatable.plugin
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldContainOnly
 
 class BasicIdeaTest : FreeSpec({
 
@@ -13,13 +12,15 @@ class BasicIdeaTest : FreeSpec({
 
         }
 
-        basicIdeaDataContext.values shouldContainOnly listOf(
-            BasicIdeaData(
-                13L,
-                12,
-                "something",
-                true,
-                2.0
+        assert(
+            basicIdeaDataContext.values == listOf(
+                BasicIdeaData(
+                    13L,
+                    12,
+                    "something",
+                    true,
+                    2.0
+                )
             )
         )
     }

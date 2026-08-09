@@ -2,10 +2,6 @@ package de.nielsfalk.datatable.plugin
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.equals.shouldBeEqual
-import io.kotest.matchers.nulls.shouldNotBeNull
-import io.kotest.matchers.string.shouldContain
 import java.nio.file.Paths
 
 class DataClassDataTest : FreeSpec({
@@ -18,7 +14,7 @@ class DataClassDataTest : FreeSpec({
                 val x = "no annotation here"
             """.trimIndent()
 
-        DataClassData.of(path, text).shouldBeEmpty()
+        assert(DataClassData.of(path, text).isEmpty())
     }
 
     "parse dataTable" {
@@ -37,13 +33,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Spock",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = "de.nielsfalk.dataTables.plugin",
-            generatedFileName = "___de_nielsfalk_dataTables_plugin___Spock.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Spock",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = "de.nielsfalk.dataTables.plugin",
+                generatedFileName = "___de_nielsfalk_dataTables_plugin___Spock.kt"
+            )
         )
     }
 
@@ -61,13 +59,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Spock",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = null,
-            generatedFileName = "______Spock.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Spock",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = null,
+                generatedFileName = "______Spock.kt"
+            )
         )
     }
 
@@ -88,13 +88,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Spock",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = null,
-            generatedFileName = "______Spock.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Spock",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = null,
+                generatedFileName = "______Spock.kt"
+            )
         )
     }
 
@@ -115,13 +117,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Spock",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = "com.startrek",
-            generatedFileName = "___com_startrek___Spock.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Spock",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = "com.startrek",
+                generatedFileName = "___com_startrek___Spock.kt"
+            )
         )
     }
 
@@ -142,13 +146,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Someone",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = "com.startrek",
-            generatedFileName = "___com_startrek___Someone.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Someone",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = "com.startrek",
+                generatedFileName = "___com_startrek___Someone.kt"
+            )
         )
     }
 
@@ -168,13 +174,15 @@ class DataClassDataTest : FreeSpec({
             }
         """.trimIndent()
 
-        val result = DataClassData.of(path, text).firstOrNull().shouldNotBeNull()
-        result shouldBeEqual DataClassData(
-            dataClassName = "Spock",
-            parameterNames = listOf("name", "length", "truthy"),
-            path = "src/aPath.kt",
-            packageString = "com.starterk",
-            generatedFileName = "___com_starterk___Spock.kt"
+        val result = DataClassData.of(path, text).firstOrNull()
+        assert(
+            result == DataClassData(
+                dataClassName = "Spock",
+                parameterNames = listOf("name", "length", "truthy"),
+                path = "src/aPath.kt",
+                packageString = "com.starterk",
+                generatedFileName = "___com_starterk___Spock.kt"
+            )
         )
     }
 
@@ -191,8 +199,10 @@ class DataClassDataTest : FreeSpec({
             dataClassData.copy(parameterNames = listOf("conflict", "on", "names"))
         )
 
-        shouldThrow<IllegalArgumentException> {
-            list.groupByClass()
-        }.message shouldContain "conflicting data table parameter names"
+        assert(
+            shouldThrow<IllegalArgumentException> {
+                list.groupByClass()
+            }.message?.contains("conflicting data table parameter names") == true
+        )
     }
 })
