@@ -82,3 +82,34 @@ For nice reformatting execute
  - [kmp sample](samples/data-table-sample-kmp/)
 
 ![kodee-electrified.png](kodee-electrified.png)
+
+## Suggested Snippet for AGENTS.md or GUIDELINES.md
+
+with the following snippet your coding-agent should produce state of the art tests
+````markdown
+# Guidelines
+
+## Technical Guideline
+
+### Testing
+
+— Use **Kotest** `FreeSpec` style for all tests.
+— **You MUST enable and use Kotlin power asserts.** Add the `org.jetbrains.kotlin.plugin.power-assert` plugin (same version as Kotlin) to the plugins block. Use `assert(condition)` for boolean assertions — the compiler renders intermediate expression values on failure, giving far better diagnostics than `shouldBe`. This is mandatory, not optional.
+— Use the **Kotlin Datatable Plugin** (`io.github.nielsfalk.datatable`).
+  — Always run `./gradlew formatDataTables` after touching data tables.
+  — Use data tables whenever test cases have similarity or similar assertions would follow each other. Feel free to add descriptions to the case or container name.
+
+### Test Structure
+
+Tests must contain empty lines to separate **given** (optional), **when**, and **then** blocks. These blocks must **not** be named or commented.
+
+```kotlin
+"paper player always chooses paper" {
+    val player = PaperPlayer()
+
+    val choice = player.choose()
+
+    assert(choice == Paper)
+}
+```
+````
